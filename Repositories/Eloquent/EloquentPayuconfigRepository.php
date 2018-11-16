@@ -1,8 +1,8 @@
 <?php
 
-namespace Modules\IcommercePayu\Repositories\Eloquent;
+namespace Modules\Icommercepayu\Repositories\Eloquent;
 
-use Modules\IcommercePayu\Repositories\PayuconfigRepository;
+use Modules\Icommercepayu\Repositories\PayuconfigRepository;
 use Modules\Core\Repositories\Eloquent\EloquentBaseRepository;
 
 class EloquentPayuconfigRepository extends EloquentBaseRepository implements PayuconfigRepository

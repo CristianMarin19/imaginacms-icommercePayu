@@ -1,14 +1,14 @@
 {
-    "name": "IcommercePayu",
+    "name": "Icommercepayu",
     "alias": "icommercepayu",
     "description": "PayU- PaymentMethod Module to Icommerce",
     "keywords": [],
-    "version": "1.0.0",
+    "version": "1.0.1",
     "active": 1,
     "order": 1,
     "providers": [
-        "Modules\\IcommercePayu\\Providers\\IcommercePayuServiceProvider",
-        "Modules\\IcommercePayu\\Providers\\RouteServiceProvider"
+        "Modules\\Icommercepayu\\Providers\\IcommercePayuServiceProvider",
+        "Modules\\Icommercepayu\\Providers\\RouteServiceProvider"
     ],
     "aliases": {},
     "files": [

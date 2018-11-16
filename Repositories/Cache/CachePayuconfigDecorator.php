@@ -1,8 +1,8 @@
 <?php
 
-namespace Modules\IcommercePayu\Repositories\Cache;
+namespace Modules\Icommercepayu\Repositories\Cache;
 
-use Modules\IcommercePayu\Repositories\PayuconfigRepository;
+use Modules\Icommercepayu\Repositories\PayuconfigRepository;
 use Modules\Core\Repositories\Cache\BaseCacheDecorator;
 
 class CachePayuconfigDecorator extends BaseCacheDecorator implements PayuconfigRepository

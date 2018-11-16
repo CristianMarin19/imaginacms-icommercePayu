@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\IcommercePayu\Entities;
+namespace Modules\Icommercepayu\Entities;
 
 class Payuconfig
 {

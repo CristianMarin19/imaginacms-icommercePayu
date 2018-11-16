@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\IcommercePayu\Events\Handlers;
+namespace Modules\Icommercepayu\Events\Handlers;
 
 use Maatwebsite\Sidebar\Group;
 use Maatwebsite\Sidebar\Item;

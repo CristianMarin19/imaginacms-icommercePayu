@@ -5,7 +5,7 @@ use Illuminate\Routing\Router;
 
 $router->group(['prefix' =>'/icommercepayu'], function (Router $router) {
     $router->bind('payuconfig', function ($id) {
-        return app('Modules\IcommercePayu\Repositories\PayuconfigRepository')->find($id);
+        return app('Modules\Icommercepayu\Repositories\PayuconfigRepository')->find($id);
     });
     $router->get('payuconfigs', [
         'as' => 'admin.icommercepayu.payuconfig.index',

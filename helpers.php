@@ -1,7 +1,7 @@
 <?php
 
 
-use Modules\IcommercePayu\Entities\Payuconfig;
+use Modules\Icommercepayu\Entities\Payuconfig;
 
 if (! function_exists('icommercepayu_get_configuration')) {
 

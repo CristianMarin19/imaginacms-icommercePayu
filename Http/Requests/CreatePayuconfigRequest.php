@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\IcommercePayu\Http\Requests;
+namespace Modules\Icommercepayu\Http\Requests;
 
 use Modules\Core\Internationalisation\BaseFormRequest;
 

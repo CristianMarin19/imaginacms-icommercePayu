@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\IcommercePayu\Database\Seeders;
+namespace Modules\Icommercepayu\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;

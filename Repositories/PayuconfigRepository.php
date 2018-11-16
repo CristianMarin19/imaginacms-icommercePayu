@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\IcommercePayu\Repositories;
+namespace Modules\Icommercepayu\Repositories;
 
 use Modules\Core\Repositories\BaseRepository;
 

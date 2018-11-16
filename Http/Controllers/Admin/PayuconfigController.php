@@ -1,13 +1,13 @@
 <?php
 
-namespace Modules\IcommercePayu\Http\Controllers\Admin;
+namespace Modules\Icommercepayu\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Modules\IcommercePayu\Entities\Payuconfig;
-use Modules\IcommercePayu\Http\Requests\CreatePayuconfigRequest;
-use Modules\IcommercePayu\Http\Requests\UpdatePayuconfigRequest;
-use Modules\IcommercePayu\Repositories\PayuconfigRepository;
+use Modules\Icommercepayu\Entities\Payuconfig;
+use Modules\Icommercepayu\Http\Requests\CreatePayuconfigRequest;
+use Modules\Icommercepayu\Http\Requests\UpdatePayuconfigRequest;
+use Modules\Icommercepayu\Repositories\PayuconfigRepository;
 use Modules\Core\Http\Controllers\Admin\AdminBaseController;
 use Modules\Setting\Repositories\SettingRepository;
 

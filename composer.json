@@ -14,7 +14,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Modules\\IcommercePayu\\": ".",
+            "Modules\\Icommercepayu\\": ".",
             "Modules\\": "Modules/"
         }
     },
@@ -29,7 +29,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Modules\\IcommercePayu\\Providers\\IcommercePayuServiceProvider"
+                "Modules\\Icommercepayu\\Providers\\IcommercePayuServiceProvider"
             ],
             "aliases": {
                 
@@ -38,7 +38,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Modules\\IcommercePayu\\": ""
+            "Modules\\Icommercepayu\\": ""
         }
     }
 }

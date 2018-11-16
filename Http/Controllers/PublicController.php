@@ -1,11 +1,11 @@
 <?php
 
-namespace Modules\IcommercePayu\Http\Controllers;
+namespace Modules\Icommercepayu\Http\Controllers;
 
 use Mockery\CountValidator\Exception;
 
-use Modules\IcommercePayu\Entities\PayU;
-use Modules\IcommercePayu\Entities\Payuconfig;
+use Modules\Icommercepayu\Entities\PayU;
+use Modules\Icommercepayu\Entities\Payuconfig;
 
 use Modules\Core\Http\Controllers\BasePublicController;
 use Route;
