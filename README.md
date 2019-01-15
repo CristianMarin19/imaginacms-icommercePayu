@@ -23,8 +23,5 @@
 - accountId:
 	512321
 
--  currency:
-	COP
-
--   Allow use of Test Credit Cards (Para poder utilizar tarjetas de crédito de prueba):
+-   Allow use of Test Credit Cards
 	
