@@ -9,6 +9,7 @@ use Modules\Icommercepayu\Http\Requests\CreateIcommercePayuRequest;
 use Modules\Icommercepayu\Http\Requests\UpdateIcommercePayuRequest;
 use Modules\Icommercepayu\Repositories\IcommercePayuRepository;
 use Modules\Core\Http\Controllers\Admin\AdminBaseController;
+use Modules\Icommerce\Repositories\PaymentMethodRepository;
 
 class IcommercePayuController extends AdminBaseController
 {
@@ -16,12 +17,16 @@ class IcommercePayuController extends AdminBaseController
      * @var IcommercePayuRepository
      */
     private $icommercepayu;
+    private $paymentMethod;
 
-    public function __construct(IcommercePayuRepository $icommercepayu)
-    {
+    public function __construct(
+        IcommercePayuRepository $icommercepayu,
+        PaymentMethodRepository $paymentMethod
+    ){
         parent::__construct();
 
         $this->icommercepayu = $icommercepayu;
+        $this->paymentMethod = $paymentMethod;
     }
 
     /**
@@ -78,12 +83,23 @@ class IcommercePayuController extends AdminBaseController
      * @param  UpdateIcommercePayuRequest $request
      * @return Response
      */
-    public function update(IcommercePayu $icommercepayu, UpdateIcommercePayuRequest $request)
+    public function update($id, UpdateIcommercePayuRequest $request)
     {
-        $this->icommercepayu->update($icommercepayu, $request->all());
 
-        return redirect()->route('admin.icommercepayu.icommercepayu.index')
-            ->withSuccess(trans('core::core.messages.resource updated', ['name' => trans('icommercepayu::icommercepayus.title.icommercepayus')]));
+        //Find payment Method
+        $paymentMethod = $this->paymentMethod->find($id);
+
+        //Add status request
+        if($request->status=='on')
+            $request['status'] = "1";
+        else
+            $request['status'] = "0";
+
+        $this->icommercepayu->update($paymentMethod,$request->all());
+
+        return redirect()->route('admin.icommerce.paymentmethod.index')
+            ->withSuccess(trans('core::core.messages.resource updated', ['name' => trans('icommercepaypal::icommercepaypals.single')]));
+
     }
 
     /**

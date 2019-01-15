@@ -17,13 +17,13 @@ class IcommercepayuDatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        $options['mainimage'] = "";
-        $options['merchantId'] = "";
-        $options['apilogin'] = "";
-        $options['apiKey'] = "";
-        $options['accountId'] = "";
+        $options['mainimage'] = null;
+        $options['merchantId'] = "508029";
+        $options['apilogin'] = "pRRXKOl8ikMmt9u";
+        $options['apiKey'] = "4Vj8eK4rloUd272L48hsrarnUA";
+        $options['accountId'] = "512321";
         $options['mode'] = "sandbox";
-        $options['test'] = 0;
+        $options['test'] = 1;
         
         $params = array(
             'title' => trans('icommercepayu::icommercepayus.single'),

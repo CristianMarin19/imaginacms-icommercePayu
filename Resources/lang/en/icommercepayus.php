@@ -16,6 +16,16 @@ return [
         'create icommercepayu' => 'Create a icommercepayu',
     ],
     'table' => [
+        'description' => 'Description',
+        'activate' => 'Activate',
+        'merchantId' => 'Merchant ID',
+        'apilogin' => 'Api Login',
+        'apiKey' => 'Api Key',
+        'accountId' => 'Account ID',
+        'url_action' => 'Url Action',
+        'currency' => 'Currency',
+        'test' => 'Allow use of Test Credit Cards',
+        'mode' => 'Mode',
     ],
     'form' => [
     ],
