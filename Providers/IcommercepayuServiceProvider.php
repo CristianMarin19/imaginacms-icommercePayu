@@ -29,7 +29,9 @@ class IcommercepayuServiceProvider extends ServiceProvider
         $this->app['events']->listen(BuildingSidebar::class, RegisterIcommercepayuSidebar::class);
 
         $this->app['events']->listen(LoadingBackendTranslations::class, function (LoadingBackendTranslations $event) {
+            $event->load('icommercepayus', array_dot(trans('icommercepayu::icommercepayus')));
             // append translations
+
         });
     }
 
@@ -52,6 +54,19 @@ class IcommercepayuServiceProvider extends ServiceProvider
 
     private function registerBindings()
     {
+        $this->app->bind(
+            'Modules\Icommercepayu\Repositories\IcommercePayuRepository',
+            function () {
+                $repository = new \Modules\Icommercepayu\Repositories\Eloquent\EloquentIcommercePayuRepository(new \Modules\Icommercepayu\Entities\IcommercePayu());
+
+                if (! config('app.cache')) {
+                    return $repository;
+                }
+
+                return new \Modules\Icommercepayu\Repositories\Cache\CacheIcommercePayuDecorator($repository);
+            }
+        );
 // add bindings
+
     }
 }
