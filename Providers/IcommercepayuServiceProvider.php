@@ -38,6 +38,7 @@ class IcommercepayuServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishConfig('icommercepayu', 'permissions');
+        $this->publishConfig('icommercepayu', 'config');
 
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
     }

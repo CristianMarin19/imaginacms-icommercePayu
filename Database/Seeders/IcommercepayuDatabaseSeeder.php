@@ -4,6 +4,7 @@ namespace Modules\Icommercepayu\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
+use Modules\Icommerce\Entities\PaymentMethod;
 
 class IcommercepayuDatabaseSeeder extends Seeder
 {
@@ -16,6 +17,23 @@ class IcommercepayuDatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        // $this->call("OthersTableSeeder");
+        $options['mainimage'] = "";
+        $options['merchantId'] = "";
+        $options['apilogin'] = "";
+        $options['apiKey'] = "";
+        $options['accountId'] = "";
+        $options['mode'] = "sandbox";
+        $options['test'] = 0;
+        
+        $params = array(
+            'title' => trans('icommercepayu::icommercepayus.single'),
+            'description' => trans('icommercepayu::icommercepayus.description'),
+            'name' => config('asgard.icommercepayu.config.paymentName'),
+            'status' => 0,
+            'options' => $options
+        );
+
+        PaymentMethod::create($params);
+
     }
 }

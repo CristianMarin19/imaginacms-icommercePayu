@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'single' => 'Payu',
+    'description' => 'The description of the method',
     'list resource' => 'List icommercepayus',
     'create resource' => 'Create icommercepayus',
     'edit resource' => 'Edit icommercepayus',
