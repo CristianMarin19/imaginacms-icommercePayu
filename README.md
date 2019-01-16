@@ -10,7 +10,7 @@
     2. add this:
         protected $except = [ 'api/icommercepayu/method/response' ];
 
-# Configurations
+## Configurations
 
     - merchantId
     - apilogin
