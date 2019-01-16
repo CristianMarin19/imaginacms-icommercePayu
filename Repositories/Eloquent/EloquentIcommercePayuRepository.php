@@ -106,4 +106,28 @@ class EloquentIcommercePayuRepository extends EloquentBaseRepository implements 
         }
     }
 
+    /**
+     * Generate Signature (from function ok)
+     * @param   string        $apikey
+     * @return $signature
+     */
+    public function signatureGeneration($apiKey,$merchantId,$referenceSale,$new_value,$currency,$state_pol){
+        
+        $split = explode('.', $new_value);
+        $decimals = $split[1];
+
+        if ($decimals % 10 == 0) {
+            $value = number_format($new_value, 1, '.', '');
+        }else{
+            $value = $new_value;
+        }
+
+        $signature_local = $apiKey.'~'.$merchantId.'~'.$referenceSale.'~'.$value.'~'.$currency.'~'.$state_pol;
+
+        $signature_md5 = md5($signature_local);
+
+        return $signature_md5;
+        
+    }
+
 }
