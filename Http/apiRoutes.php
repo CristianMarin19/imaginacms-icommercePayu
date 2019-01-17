@@ -5,7 +5,7 @@ use Illuminate\Routing\Router;
 $router->group(['prefix' => 'icommercepayu'], function (Router $router) {
     
     $router->get('/{orderid}', [
-        'as' => 'icommercepayu.api.paypal.init',
+        'as' => 'icommercepayu.api.payu.init',
         'uses' => 'IcommercePayuApiController@init',
     ]);
 
