@@ -98,7 +98,7 @@ class IcommercePayuController extends AdminBaseController
         $this->icommercepayu->update($paymentMethod,$request->all());
 
         return redirect()->route('admin.icommerce.paymentmethod.index')
-            ->withSuccess(trans('core::core.messages.resource updated', ['name' => trans('icommercepaypal::icommercepaypals.single')]));
+            ->withSuccess(trans('core::core.messages.resource updated', ['name' => trans('icommercepayu::icommercepayus.single')]));
 
     }
 
