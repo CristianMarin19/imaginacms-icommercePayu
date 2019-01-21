@@ -8,7 +8,7 @@
 
     1. Go to app/http/middleware/VerifyCsrfToken
     2. add this:
-        protected $except = [ 'api/icommercepayu/method/response' ];
+        protected $except = [ 'api/icommercepayu/response' ];
 
 ## Configurations
 
@@ -22,7 +22,7 @@
 
 ### Init (Parameters = orderID)
     
-    https://icommerce.imagina.com.co/api/icommercepayu/{orderid}
+    https://icommerce.imagina.com.co/api/icommercepayu
 
 
 

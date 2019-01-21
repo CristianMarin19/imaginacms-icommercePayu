@@ -54,7 +54,7 @@ class IcommercePayuApiController extends BaseApiController
     /**
      * Init data
      * @param Requests request
-     * @param Requests orderid
+     * @param Requests orderID
      * @return route
      */
     public function init(Request $request){
@@ -62,7 +62,7 @@ class IcommercePayuApiController extends BaseApiController
         
         try {
 
-            $orderID = $request->orderid;
+            $orderID = $request->orderID;
             \Log::info('Module Icommercepayu: Init-ID:'.$orderID);
 
             $paymentName = config('asgard.icommercepayu.config.paymentName');

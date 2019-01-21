@@ -4,17 +4,17 @@ use Illuminate\Routing\Router;
 
 $router->group(['prefix' => 'icommercepayu'], function (Router $router) {
     
-    $router->get('/{orderid}', [
+    $router->get('/', [
         'as' => 'icommercepayu.api.payu.init',
         'uses' => 'IcommercePayuApiController@init',
     ]);
 
-    $router->get('/method/response', [
+    $router->get('/response', [
         'as' => 'icommercepayu.api.payu.response',
         'uses' => 'IcommercePayuApiController@response',
     ]);
 
-    $router->post('/method/response', [
+    $router->post('/response', [
         'as' => 'icommercepayu.api.payu.response',
         'uses' => 'IcommercePayuApiController@response',
     ]);
