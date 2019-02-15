@@ -17,6 +17,7 @@ class IcommercepayuDatabaseSeeder extends Seeder
     {
         Model::unguard();
 
+        $options['init'] = "Modules\Icommercepayu\Http\Controllers\Api\IcommercePayuApiController";
         $options['mainimage'] = null;
         $options['merchantId'] = "508029";
         $options['apilogin'] = "pRRXKOl8ikMmt9u";

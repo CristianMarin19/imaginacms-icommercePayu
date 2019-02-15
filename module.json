@@ -1,7 +1,7 @@
 {
     "name": "Icommercepayu",
     "alias": "icommercepayu",
-    "description": "",
+    "description": "PayU- PaymentMethod Module to Icommerce",
     "keywords": [],
     "version": "1.0.0",
 	"active": 1,

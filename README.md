@@ -22,7 +22,7 @@
 
 ### Init (Parameters = orderID)
     
-    https://icommerce.imagina.com.co/api/icommercepayu
+    https://mydomain/api/icommercepayu
 
 
 
