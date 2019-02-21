@@ -10,6 +10,8 @@ use Illuminate\Http\Response;
 use Modules\Core\Http\Controllers\BasePublicController;
 
 // Repositories
+use Modules\Icommercepayu\Repositories\IcommercePayuRepository;
+
 use Modules\Icommerce\Repositories\PaymentMethodRepository;
 use Modules\Icommerce\Repositories\TransactionRepository;
 use Modules\Icommerce\Repositories\OrderRepository;
@@ -19,10 +21,10 @@ use Modules\Icommerce\Repositories\CurrencyRepository;
 use Modules\Icommercepayu\Entities\PayU;
 
 
-
 class PublicController extends BasePublicController
 {
   
+    private $icommercepayu;
     private $paymentMethod;
     private $order;
     private $transaction;
@@ -33,12 +35,14 @@ class PublicController extends BasePublicController
     protected $urlProduction;
 
     public function __construct(
+        IcommercePayuRepository $icommercepayu,
         PaymentMethodRepository $paymentMethod,
         OrderRepository $order,
         TransactionRepository $transaction,
         CurrencyRepository $currency
     )
     {
+        $this->icommercepayu = $icommercepayu;
         $this->paymentMethod = $paymentMethod;
         $this->order = $order;
         $this->transaction = $transaction;
@@ -54,14 +58,15 @@ class PublicController extends BasePublicController
      * @param Requests request
      * @return route
      */
-    public function index($eorderID,$etransactionID,$ecurrencyID){
+    public function index($eURL){
 
         try {
 
-            // Decr Base 64
-            $orderID = base64_decode($eorderID);
-            $transactionID = base64_decode($etransactionID);
-            $currencyID = base64_decode($ecurrencyID);
+            // Decr
+            $infor = $this->icommercepayu->decriptUrl($eURL);
+            $orderID = $infor[0];
+            $transactionID = $infor[1];
+            $currencyID = $infor[2];
 
             \Log::info('Module Icommercepayu: Index-ID:'.$orderID);
             
@@ -106,8 +111,38 @@ class PublicController extends BasePublicController
             $payU->setBuyerEmail($order->email);
             $payU->setConfirmationUrl(Route("icommercepayu.api.payu.response"));
             $payU->setResponseUrl(Route("icommercepayu.back"));
-
+            
             $payU->executeRedirection();
+            
+           
+            //========= Testing
+            /*
+            $client = new \GuzzleHttp\Client();
+
+            $signature = $this->setSignature($paymentMethod->options->apiKey,$paymentMethod->options->merchantId,$orderID,$order->total,$currency->code);
+           
+            $res = $client->request('GET', $this->urlSandbox, [
+                'form_params' => [
+                    'merchantId' => $paymentMethod->options->merchantId,
+                    'accountId' => $paymentMethod->options->accountId,
+                    'description' => $restDescription,
+                    'referenceCode' => $orderID,
+                    'amount' => $order->total,
+                    'tax' => 0,
+                    'taxReturnBase' => 0,
+                    'currency' => $currency->code,
+                    'lng' => locale(),
+                    'test' => $paymentMethod->options->test,
+                    'buyerEmail' => $order->email,
+                    'signature' => $signature,
+                    'responseUrl' => Route("icommercepayu.back"),
+                    'confirmationUrl' => Route("icommercepayu.api.payu.response")
+                ]
+            ]);
+
+            dd($res);
+            */
+            
             
 
         } catch (\Exception $e) {
@@ -154,6 +189,14 @@ class PublicController extends BasePublicController
         }
        
     }
+    
+    /*
+    public function setSignature($apiKey,$merchantId,$referenceCode,$amount,$currency){
+
+        return md5($apiKey."~".$merchantId."~".$referenceCode."~".$amount.'~'.$currency);
+    
+    }
+    */
 
    
 }

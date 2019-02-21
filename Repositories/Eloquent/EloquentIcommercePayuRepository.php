@@ -130,4 +130,36 @@ class EloquentIcommercePayuRepository extends EloquentBaseRepository implements 
         
     }
 
+    /**
+     * Encript url to reedirect
+     *
+     * @param  $orderID
+     * @param  $transactionID
+     * @param  $currencyID
+     * @return $url
+     */
+    public function encriptUrl($orderID,$transactionID,$currencyID){
+
+        $url = "{$orderID}-{$transactionID}-{$currencyID}-".time();
+        $encrip = base64_encode($url);
+
+        return  $encrip;
+
+    }
+
+     /**
+     * Decript url to get data
+     *
+     * @param  $eUrl
+     * @return array
+     */
+    public function decriptUrl($eUrl){
+
+        $decrip = base64_decode($eUrl);
+        $infor = explode('-',$decrip);
+        
+        return  $infor;
+
+    }
+
 }

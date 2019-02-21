@@ -88,12 +88,10 @@ class IcommercePayuApiController extends BaseApiController
                 ]))
             );
             
-            // Encri Base 64
-            $eOrderID = base64_encode($order->id);
-            $eTransactionID = base64_encode($transaction->id);
-            $eCurrencyID = base64_encode($currency->id);
+            // Encri
+            $eUrl = $this->icommercepayu->encriptUrl($order->id,$transaction->id,$currency->id);
 
-            $redirectRoute = route('icommercepayu',[$eOrderID,$eTransactionID,$eCurrencyID]);
+            $redirectRoute = route('icommercepayu',[$eUrl]);
 
             // Response
             $response = [ 'data' => [
