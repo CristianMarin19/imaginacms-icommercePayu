@@ -25,16 +25,35 @@ class IcommercepayuDatabaseSeeder extends Seeder
         $options['accountId'] = "512321";
         $options['mode'] = "sandbox";
         $options['test'] = 1;
-        
-        $params = array(
-            'title' => trans('icommercepayu::icommercepayus.single'),
-            'description' => trans('icommercepayu::icommercepayus.description'),
-            'name' => config('asgard.icommercepayu.config.paymentName'),
-            'status' => 0,
-            'options' => $options
-        );
 
-        PaymentMethod::create($params);
+        $titleTrans = 'icommercepayu::icommercepayus.single';
+        $descriptionTrans = 'icommercepayu::icommercepayus.description';
+        
+        foreach (['en', 'es'] as $locale) {
+
+            if($locale=='en'){
+                $params = array(
+                    'title' => trans($titleTrans),
+                    'description' => trans($descriptionTrans),
+                    'name' => config('asgard.icommercepayu.config.paymentName'),
+                    'status' => 0,
+                    'options' => $options
+                );
+
+                $paymentMethod = PaymentMethod::create($params);
+                
+            }else{
+
+                $title = trans($titleTrans,[],$locale);
+                $description = trans($descriptionTrans,[],$locale);
+
+                $paymentMethod->translateOrNew($locale)->title = $title;
+                $paymentMethod->translateOrNew($locale)->description = $description;
+
+                $paymentMethod->save();
+            }
+
+        }// Foreach
 
     }
 }
