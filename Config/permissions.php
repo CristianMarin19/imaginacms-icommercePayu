@@ -1,11 +1,11 @@
 <?php
 
 return [
-    'icommercepayu.payuconfigs' => [
-        'index' => 'icommercepayu::payuconfigs.list resource',
-        'create' => 'icommercepayu::payuconfigs.create resource',
-        'edit' => 'icommercepayu::payuconfigs.edit resource',
-        'destroy' => 'icommercepayu::payuconfigs.destroy resource',
+    'icommercepayu.icommercepayus' => [
+        'index' => 'icommercepayu::icommercepayus.list resource',
+        'create' => 'icommercepayu::icommercepayus.create resource',
+        'edit' => 'icommercepayu::icommercepayus.edit resource',
+        'destroy' => 'icommercepayu::icommercepayus.destroy resource',
     ],
 // append
 

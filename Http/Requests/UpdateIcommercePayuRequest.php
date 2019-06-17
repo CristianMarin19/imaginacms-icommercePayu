@@ -4,7 +4,7 @@ namespace Modules\Icommercepayu\Http\Requests;
 
 use Modules\Core\Internationalisation\BaseFormRequest;
 
-class UpdatePayuconfigRequest extends BaseFormRequest
+class UpdateIcommercePayuRequest extends BaseFormRequest
 {
     public function rules()
     {

@@ -2,11 +2,12 @@
     "name": "imagina/icommercepayu-module",
     "description": "",
     "type": "asgard-module",
-    "license": "MIT", 
+    "license": "MIT",
     "require": {
         "php": ">=7.0.0",
         "composer/installers": "~1.0",
-        "idavoll/core-module": "~3.0"
+        "idavoll/core-module": "~3.0",
+        "imagina/icommerce-module": ">=1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "~6.0",
@@ -22,14 +23,14 @@
     "prefer-stable": true,
     "authors": [
         {
-            "name": "Imagina Dev",
+            "name": "Imagina dev",
             "email": "soporte@imaginacolombia.com"
         }
     ],
     "extra": {
         "laravel": {
             "providers": [
-                "Modules\\Icommercepayu\\Providers\\IcommercePayuServiceProvider"
+                "Modules\\Icommercepayu\\Providers\\IcommercepayuServiceProvider"
             ],
             "aliases": {
                 

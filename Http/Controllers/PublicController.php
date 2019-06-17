@@ -2,307 +2,201 @@
 
 namespace Modules\Icommercepayu\Http\Controllers;
 
-use Mockery\CountValidator\Exception;
+// Requests & Response
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
-use Modules\Icommercepayu\Entities\PayU;
-use Modules\Icommercepayu\Entities\Payuconfig;
-
+// Base
 use Modules\Core\Http\Controllers\BasePublicController;
-use Route;
-use Session;
 
-use Modules\User\Contracts\Authentication;
-use Modules\User\Repositories\UserRepository;
-use Modules\Icommerce\Repositories\CurrencyRepository;
-use Modules\Icommerce\Repositories\ProductRepository;
+// Repositories
+use Modules\Icommercepayu\Repositories\IcommercePayuRepository;
+
+use Modules\Icommerce\Repositories\PaymentMethodRepository;
+use Modules\Icommerce\Repositories\TransactionRepository;
 use Modules\Icommerce\Repositories\OrderRepository;
-use Modules\Icommerce\Repositories\Order_ProductRepository;
-use Modules\Setting\Contracts\Setting;
-use Illuminate\Http\Request as Requests;
-use Illuminate\Support\Facades\Log;
+use Modules\Icommerce\Repositories\CurrencyRepository;
 
+// Entities
+use Modules\Icommercepayu\Entities\PayU;
 
 
 class PublicController extends BasePublicController
 {
   
+    private $icommercepayu;
+    private $paymentMethod;
     private $order;
-    private $setting;
-    private $user;
-    protected $auth;
-    protected $payU;
+    private $transaction;
+    private $currency;
 
+    private $payu;
     protected $urlSandbox;
     protected $urlProduction;
 
-    public function __construct(Setting $setting, Authentication $auth, UserRepository $user,  OrderRepository $order)
+    public function __construct(
+        IcommercePayuRepository $icommercepayu,
+        PaymentMethodRepository $paymentMethod,
+        OrderRepository $order,
+        TransactionRepository $transaction,
+        CurrencyRepository $currency
+    )
     {
-
-        $this->setting = $setting;
-        $this->auth = $auth;
-        $this->user = $user;
+        $this->icommercepayu = $icommercepayu;
+        $this->paymentMethod = $paymentMethod;
         $this->order = $order;
+        $this->transaction = $transaction;
+        $this->currency = $currency;
 
         $this->urlSandbox = "https://sandbox.gateway.payulatam.com/ppp-web-gateway/";
         $this->urlProduction = "https://checkout.payulatam.com/ppp-web-gateway-payu/";
-
     }
 
+
     /**
-     * Go to the payment
+     * Index data
      * @param Requests request
-     * @return redirect payment 
+     * @return route
      */
-    public function index(Requests $request)
-    {
+    public function index($eURL){
 
-        if($request->session()->exists('orderID')) {
+        try {
 
-            $orderID = session('orderID');
+            // Decr
+            $infor = $this->icommercepayu->decriptUrl($eURL);
+            $orderID = $infor[0];
+            $transactionID = $infor[1];
+            $currencyID = $infor[2];
+
+            \Log::info('Module Icommercepayu: Index-ID:'.$orderID);
+            
+            // Validate get data
             $order = $this->order->find($orderID);
+            $transaction = $this->transaction->find($transactionID);
+            $currency = $this->currency->find($currencyID);
 
+            $paymentName = config('asgard.icommercepayu.config.paymentName');
+
+            // Configuration
+            $attribute = array('name' => $paymentName);
+            $paymentMethod = $this->paymentMethod->findByAttributes($attribute);
+
+            // Order
+            $order = $this->order->find($orderID);
+            
             $restDescription = "Order:{$orderID} - {$order->email}";
+
+            // OrderID Method
+            $orderID = $order->id."-".$transaction->id;
+
+            // Payu generate
+            $payU = new PayU();
+
+            if($paymentMethod->options->mode=="sandbox")
+                $payU->setUrlgate($this->urlSandbox);
+            else
+                $payU->setUrlgate($this->urlProduction);
+
+            $payU->setMerchantid($paymentMethod->options->merchantId);
+            $payU->setAccountid($paymentMethod->options->accountId);
+            $payU->setApikey($paymentMethod->options->apiKey);
+            $payU->setReferenceCode($orderID); // OrderID
+            $payU->setDescription($restDescription); //DESCRIPCION
+            $payU->setAmount($order->total);
+            $payU->setCurrency($currency->code);
+            $payU->setTax(0); // 0 valor del impuesto asociado a la venta
+            $payU->setTaxReturnBase(0); // 0 valor de devolución del impuesto
+            $payU->setTest($paymentMethod->options->test);
+            $payU->setLng(locale()); // Idioma
+            $payU->setBuyerEmail($order->email);
+            $payU->setConfirmationUrl(Route("icommercepayu.api.payu.response"));
+            $payU->setResponseUrl(Route("icommercepayu.back"));
+            
+            $payU->executeRedirection();
+            
            
-            $config = new Payuconfig();
-            $config = $config->getData();
+            //========= Testing
+            /*
+            $client = new \GuzzleHttp\Client();
 
-            try {
-
-                $payU = new PayU();
-
-                if($config->url_action==0)
-                    $payU->setUrlgate($this->urlSandbox);
-                else
-                    $payU->setUrlgate($this->urlProduction);
-
-
-                $payU->setMerchantid($config->merchantId);
-                $payU->setAccountid($config->accountId);
-                $payU->setApikey($config->apiKey);
-                   
-                $orderID = $orderID."-".time();
-                
-                $payU->setReferenceCode($orderID); // OrderID
-                $payU->setDescription($restDescription); //DESCRIPCION
-                $payU->setAmount($order->total);
-                $payU->setCurrency($config->currency);
-                $payU->setTax(0); // 0 valor del impuesto asociado a la venta
-                $payU->setTaxReturnBase(0); // 0 valor de devolución del impuesto
-                $payU->setTest($config->test);
-                $payU->setLng(locale()); // Idioma
-                $payU->setBuyerEmail($order->email);
-
-                $payU->setConfirmationUrl(Route("icommercepayu.ok"));
-                $payU->setResponseUrl(Route("icommercepayu.back"));
-
-                $payU->executeRedirection();
-
-                
-            } catch (Exception $e) {
-                echo $e->getMessage();
-            }
-
-
-        }else{
-           return redirect()->route('homepage');
-        }
-
-    }
-
-     /**
-     * Confirmation Page
-     * @param Requests request
-     * @return response
-     */
-    public function ok(Requests $request)
-    {
-
-        //Log::info('Respuesta Confirmacion PayU: Recibida '.time());
-        if(isset($request->reference_sale)){
-
-            $referenceSale = explode('-',$request->reference_sale);
-            $order = $this->order->find($referenceSale[0]);
-
-
-            // Not PROCESSED and CANCELED
-            if($order->order_status!=12 && $order->order_status!=2){
-
-                $email_from = $this->setting->get('icommerce::from-email');
-                $email_to = explode(',',$this->setting->get('icommerce::form-emails'));
-                $sender  = $this->setting->get('core::site-name');
-              
-                $config = new Payuconfig();
-                $config = $config->getData();
-                
-                $products=[];
-                
-                foreach ($order->products as $product) {
-                    array_push($products,[
-                        "title" => $product->title,
-                        "sku" => $product->sku,
-                        "quantity" => $product->pivot->quantity,
-                        "price" => $product->pivot->price,
-                        "total" => $product->pivot->total,
-                    ]);
-                }
-
-                $userEmail = $order->email;
-                $userFirstname = "{$order->first_name} {$order->last_name}";
-               
-                try {
-                    
-                    //Log::info('Order esta Pendiente -'.$referenceSale[0]);
-
-                    $signature = $this->signatureGeneration($config->apiKey,$request->merchant_id,$request->reference_sale,$request->value,$request->currency,$request->state_pol);
-
-                    if (strtoupper($signature) == strtoupper($request->sign)) {
-
-                        $transactionState = $request->state_pol;
-                        $polResponseCode = $request->response_code_pol;
-
-                        if($transactionState == 6 && $polResponseCode == 5){
-
-                            $success_process = icommerce_executePostOrder($referenceSale[0],6,$request);
-                            $msjTheme = "icommerce::email.error_order";
-                            $msjSubject = trans('icommerce::common.emailSubject.failed')."- Order:".$order->id;
-                            $msjIntro = trans('icommerce::common.emailIntro.failed');
-                           
-                           
-                        } else if($transactionState == 6 && $polResponseCode == 4){ 
-
-                            $success_process = icommerce_executePostOrder($referenceSale[0],7,$request);
-                            $msjTheme = "icommerce::email.error_order";
-                            $msjSubject = trans('icommerce::common.emailSubject.refunded')."- Order:".$order->id;
-                            $msjIntro = trans('icommerce::common.emailIntro.refunded');
-                            
-                        } else if($transactionState == 12 && $polResponseCode == 9994){
-
-                            $success_process = icommerce_executePostOrder($referenceSale[0],10,$request);
-                            $msjTheme = "icommerce::email.error_order";
-                            $msjSubject = trans('icommerce::common.emailSubject.pending')."- Order:".$order->id;
-                            $msjIntro = trans('icommerce::common.emailIntro.pending');
-
-                        } else if($transactionState == 4 && $polResponseCode == 1){
-
-                            $success_process = icommerce_executePostOrder($referenceSale[0],1,$request);
-                            $msjTheme = "icommerce::email.success_order";
-                            $msjSubject = trans('icommerce::common.emailSubject.complete')."- Order:".$order->id;
-                            $msjIntro = trans('icommerce::common.emailIntro.complete');
-                           
-                        }else{ 
-
-                            $success_process = icommerce_executePostOrder($referenceSale[0],6,$request);
-                            $msjTheme = "icommerce::email.error_order";
-                            $msjSubject = trans('icommerce::common.emailSubject.failed')."- Order:".$order->id;
-                            $msjIntro = trans('icommerce::common.emailIntro.failed');
-                        }
-                        
-                        $order = $this->order->find($referenceSale[0]);
-
-                        $content=[
-                            'order'=>$order,
-                            'products' => $products,
-                            'user' => $userFirstname
-                        ];
-
-                        icommerce_emailSend(['email_from'=>[$email_from],'theme' => $msjTheme,'email_to' => $request->email_buyer,'subject' => $msjSubject, 'sender'=>$sender,'data' => array('title' => $msjSubject,'intro'=> $msjIntro,'content'=>$content)]);
-                        
-                        icommerce_emailSend(['email_from'=>[$email_from],'theme' => $msjTheme,'email_to' => $email_to,'subject' => $msjSubject, 'sender'=>$sender,'data' => array('title' => $msjSubject,'intro'=> $msjIntro,'content'=>$content)]);
-                        
-                        return response('Correcto', 200);
-
-                    }else{
-
-                        $success_process = icommerce_executePostOrder($referenceSale[0],6,$request);
-
-                        $msjTheme = "icommerce::email.error_order";
-                        $msjSubject = trans('icommerce::common.payuSubject.signError')."- Order:".$order->id;
-                        $msjIntro = trans('icommerce::common.payuIntro.signError');
-
-                        $order = $this->order->find($referenceSale[0]);
-                        
-                        $content=[
-                            'order'=>$order,
-                            'products' => $products,
-                            'user' => $userFirstname
-                        ];
-                        
-                        icommerce_emailSend(['email_from'=>[$email_from],'theme' => $msjTheme ,'email_to' => [$userEmail],'subject' => $msjSubject, 'sender'=>$sender, 'data' => array('title' => $msjSubject,'intro'=>$msjIntro,'content'=>$content,)]);
-                        
-
-                        icommerce_emailSend(['email_from'=>[$email_from],'theme' => $msjTheme ,'email_to' => $email_to,'subject' => $msjSubject, 'sender'=>$sender, 'data' => array('title' => $msjSubject,'intro'=>$msjIntro,'content'=>$content,)]);
-                        
-                    }
-                    
-                }catch (Exception $e) {
-
-                    Log::info('Error en Exception'.time());
-                    //echo $e->getMessage();
-                }
+            $signature = $this->setSignature($paymentMethod->options->apiKey,$paymentMethod->options->merchantId,$orderID,$order->total,$currency->code);
            
-            }
+            $res = $client->request('GET', $this->urlSandbox, [
+                'form_params' => [
+                    'merchantId' => $paymentMethod->options->merchantId,
+                    'accountId' => $paymentMethod->options->accountId,
+                    'description' => $restDescription,
+                    'referenceCode' => $orderID,
+                    'amount' => $order->total,
+                    'tax' => 0,
+                    'taxReturnBase' => 0,
+                    'currency' => $currency->code,
+                    'lng' => locale(),
+                    'test' => $paymentMethod->options->test,
+                    'buyerEmail' => $order->email,
+                    'signature' => $signature,
+                    'responseUrl' => Route("icommercepayu.back"),
+                    'confirmationUrl' => Route("icommercepayu.api.payu.response")
+                ]
+            ]);
 
-            return response('Correcto', 200);
+            dd($res);
+            */
+            
+            
 
-        }// If reference request
-    }
+        } catch (\Exception $e) {
 
-    /**
-     * Generate Signature (from function ok)
-     * @param   string        $apikey
-     * @return $signature
-     */
-    public function signatureGeneration($apiKey,$merchantId,$referenceSale,$new_value,$currency,$state_pol){
-        
-        $split = explode('.', $new_value);
-        $decimals = $split[1];
+            \Log::error('Module Icommercepayu-Index: Message: '.$e->getMessage());
+            \Log::error('Module Icommercepayu-Index: Code: '.$e->getCode());
 
-        if ($decimals % 10 == 0) {
-            $value = number_format($new_value, 1, '.', '');
-        }else{
-            $value = $new_value;
+            //Message Error
+            $status = 500;
+            $response = [
+              'errors' => $e->getMessage(),
+              'code' => $e->getCode()
+            ];
+
+            //return response()->json($response, $status ?? 200);
+
+            return redirect()->route("icommercepayu.api.payu.response");
+
         }
-
-        $signature_local = $apiKey.'~'.$merchantId.'~'.$referenceSale.'~'.$value.'~'.$currency.'~'.$state_pol;
-
-        $signature_md5 = md5($signature_local);
-
-        return $signature_md5;
-        
+   
     }
+
 
      /**
      * Button Back PayU
      * @param  Request $request
      * @return redirect
      */
-    public function back(Requests $request){
+    public function back(Request $request){
 
         if(isset($request->referenceCode)){
 
             $referenceSale = explode('-',$request->referenceCode);
             $order = $this->order->find($referenceSale[0]);
 
-            $user = $this->auth->user();
-
-            if (isset($user) && !empty($user))
-              if (!empty($order))
-                return redirect()->route('icommerce.orders.show', [$order->id]);
-              else
-                return redirect()->route('homepage')
-                  ->withSuccess(trans('icommerce::common.order_success'));
-            else
-              if (!empty($order))
+            if (!empty($order))
                 return redirect()->route('icommerce.order.showorder', [$order->id, $order->key]);
-              else
-                return redirect()->route('homepage')
-                  ->withSuccess(trans('icommerce::common.order_success'));
+            else
+                return redirect()->route('homepage');
+                 
 
         }else{
             return redirect()->route('homepage');
         }
        
     }
+    
+    /*
+    public function setSignature($apiKey,$merchantId,$referenceCode,$amount,$currency){
+
+        return md5($apiKey."~".$merchantId."~".$referenceCode."~".$amount.'~'.$currency);
+    
+    }
+    */
 
    
 }

@@ -1,30 +1,29 @@
 # asgardcms-icommercepayu
 
-### Add Except
+## Seeder
 
-1. Go to app/http/middleware/VerifyCsrfToken
-2. add this:  
+    run php artisan module:seed Icommercepayu
 
-	protected $except = [
-        '/icommercepayu/ok'
-    ];
+## Add Except
 
-### Data Configuration Example
+    1. Go to app/http/middleware/VerifyCsrfToken
+    2. add this:
+        protected $except = [ 'api/icommercepayu/response' ];
 
-- merchantId: 	
-	508029
+## Configurations
 
-- apilogin:
-	pRRXKOl8ikMmt9u	
-	
-- apiKey:
-	4Vj8eK4rloUd272L48hsrarnUA
+    - merchantId
+    - apilogin
+    - apiKey
+    - accountId
+    - Allow use of Test Credit Cards
 
-- accountId:
-	512321
+## API
 
--  currency:
-	COP
+### Init (Parameters = orderID)
+    
+    https://mydomain/api/icommercepayu
 
--   Allow use of Test Credit Cards
-	
+
+
+

@@ -6,9 +6,9 @@ use Illuminate\Support\ServiceProvider;
 use Modules\Core\Traits\CanPublishConfiguration;
 use Modules\Core\Events\BuildingSidebar;
 use Modules\Core\Events\LoadingBackendTranslations;
-use Modules\Icommercepayu\Events\Handlers\RegisterIcommercePayuSidebar;
+use Modules\Icommercepayu\Events\Handlers\RegisterIcommercepayuSidebar;
 
-class IcommercePayuServiceProvider extends ServiceProvider
+class IcommercepayuServiceProvider extends ServiceProvider
 {
     use CanPublishConfiguration;
     /**
@@ -26,10 +26,10 @@ class IcommercePayuServiceProvider extends ServiceProvider
     public function register()
     {
         $this->registerBindings();
-        $this->app['events']->listen(BuildingSidebar::class, RegisterIcommercePayuSidebar::class);
+        $this->app['events']->listen(BuildingSidebar::class, RegisterIcommercepayuSidebar::class);
 
         $this->app['events']->listen(LoadingBackendTranslations::class, function (LoadingBackendTranslations $event) {
-            $event->load('payuconfigs', array_dot(trans('icommercepayu::payuconfigs')));
+            $event->load('icommercepayus', array_dot(trans('icommercepayu::icommercepayus')));
             // append translations
 
         });
@@ -37,8 +37,8 @@ class IcommercePayuServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        $this->publishConfig('Icommercepayu', 'permissions');
-        $this->publishConfig('Icommercepayu', 'settings');
+        $this->publishConfig('icommercepayu', 'permissions');
+        $this->publishConfig('icommercepayu', 'config');
 
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
     }
@@ -56,15 +56,15 @@ class IcommercePayuServiceProvider extends ServiceProvider
     private function registerBindings()
     {
         $this->app->bind(
-            'Modules\Icommercepayu\Repositories\PayuconfigRepository',
+            'Modules\Icommercepayu\Repositories\IcommercePayuRepository',
             function () {
-                $repository = new \Modules\Icommercepayu\Repositories\Eloquent\EloquentPayuconfigRepository(new \Modules\Icommercepayu\Entities\Payuconfig());
+                $repository = new \Modules\Icommercepayu\Repositories\Eloquent\EloquentIcommercePayuRepository(new \Modules\Icommercepayu\Entities\IcommercePayu());
 
                 if (! config('app.cache')) {
                     return $repository;
                 }
 
-                return new \Modules\Icommercepayu\Repositories\Cache\CachePayuconfigDecorator($repository);
+                return new \Modules\Icommercepayu\Repositories\Cache\CacheIcommercePayuDecorator($repository);
             }
         );
 // add bindings

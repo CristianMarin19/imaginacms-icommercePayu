@@ -1,10 +1,10 @@
 <?php
 
-namespace Modules\Icommercepayu\Entities;
+namespace Modules\IcommercePayu\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Modules\Bcrud\Support\Traits\CrudTrait;
-use Modules\Icommercepayu\Entities\Payuconfig;
+use Modules\IcommercePayu\Entities\Payuconfig;
 
 
 class PayU

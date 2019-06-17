@@ -4,42 +4,38 @@ use Illuminate\Routing\Router;
 /** @var Router $router */
 
 $router->group(['prefix' =>'/icommercepayu'], function (Router $router) {
-    $router->bind('payuconfig', function ($id) {
-        return app('Modules\Icommercepayu\Repositories\PayuconfigRepository')->find($id);
+    $router->bind('icommercepayu', function ($id) {
+        return app('Modules\Icommercepayu\Repositories\IcommercePayuRepository')->find($id);
     });
-    $router->get('payuconfigs', [
-        'as' => 'admin.icommercepayu.payuconfig.index',
-        'uses' => 'PayuconfigController@index',
-        'middleware' => 'can:icommercepayu.payuconfigs.index'
+    $router->get('icommercepayus', [
+        'as' => 'admin.icommercepayu.icommercepayu.index',
+        'uses' => 'IcommercePayuController@index',
+        'middleware' => 'can:icommercepayu.icommercepayus.index'
     ]);
-    $router->get('payuconfigs/create', [
-        'as' => 'admin.icommercepayu.payuconfig.create',
-        'uses' => 'PayuconfigController@create',
-        'middleware' => 'can:icommercepayu.payuconfigs.create'
+    $router->get('icommercepayus/create', [
+        'as' => 'admin.icommercepayu.icommercepayu.create',
+        'uses' => 'IcommercePayuController@create',
+        'middleware' => 'can:icommercepayu.icommercepayus.create'
     ]);
-    $router->post('payuconfigs', [
-        'as' => 'admin.icommercepayu.payuconfig.store',
-        'uses' => 'PayuconfigController@store',
-        'middleware' => 'can:icommercepayu.payuconfigs.create'
+    $router->post('icommercepayus', [
+        'as' => 'admin.icommercepayu.icommercepayu.store',
+        'uses' => 'IcommercePayuController@store',
+        'middleware' => 'can:icommercepayu.icommercepayus.create'
     ]);
-    $router->get('payuconfigs/{payuconfig}/edit', [
-        'as' => 'admin.icommercepayu.payuconfig.edit',
-        'uses' => 'PayuconfigController@edit',
-        'middleware' => 'can:icommercepayu.payuconfigs.edit'
+    $router->get('icommercepayus/{icommercepayu}/edit', [
+        'as' => 'admin.icommercepayu.icommercepayu.edit',
+        'uses' => 'IcommercePayuController@edit',
+        'middleware' => 'can:icommercepayu.icommercepayus.edit'
     ]);
-
-
-    $router->put('payuconfigs', [
-        'as' => 'admin.icommercepayu.payuconfig.update',
-        'uses' => 'PayuconfigController@update',
-        'middleware' => 'can:icommercepayu.payuconfigs.edit'
+    $router->put('icommercepayus/{id}', [
+        'as' => 'admin.icommercepayu.icommercepayu.update',
+        'uses' => 'IcommercePayuController@update',
+        'middleware' => 'can:icommercepayu.icommercepayus.edit'
     ]);
-    
-
-    $router->delete('payuconfigs/{payuconfig}', [
-        'as' => 'admin.icommercepayu.payuconfig.destroy',
-        'uses' => 'PayuconfigController@destroy',
-        'middleware' => 'can:icommercepayu.payuconfigs.destroy'
+    $router->delete('icommercepayus/{icommercepayu}', [
+        'as' => 'admin.icommercepayu.icommercepayu.destroy',
+        'uses' => 'IcommercePayuController@destroy',
+        'middleware' => 'can:icommercepayu.icommercepayus.destroy'
     ]);
 // append
 
