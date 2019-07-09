@@ -63,8 +63,7 @@ class IcommercePayuApiController extends BaseApiController
         try {
 
             $orderID = $request->orderID;
-            \Log::info('Module Icommercepayu: Init-ID:'.$orderID);
-
+            
             $paymentName = config('asgard.icommercepayu.config.paymentName');
 
             // Configuration
@@ -80,12 +79,12 @@ class IcommercePayuApiController extends BaseApiController
             
             // Create Transaction
             $transaction = $this->validateResponseApi(
-                $this->transactionController->create(new Request([
+                $this->transactionController->create(new Request( ["attributes" => [
                     'order_id' => $order->id,
                     'payment_method_id' => $paymentMethod->id,
                     'amount' => $order->total,
                     'status' => $statusOrder
-                ]))
+                ]]))
             );
             
             // Encri
@@ -120,17 +119,16 @@ class IcommercePayuApiController extends BaseApiController
      */
     public function response(Request $request){
 
-        try {
+       try {
 
-            \Log::info('Module Icommercepayu: Response - '.time());
-
+         
             // Configuration
             $paymentName = config('asgard.icommercepayu.config.paymentName');
             $attribute = array('name' => $paymentName);
             $paymentMethod = $this->paymentMethod->findByAttributes($attribute);
             
             // Get IDS
-            $referenceSale = explode('-',$request->reference_sale);
+             $referenceSale = explode('-',$request->reference_sale);
             $orderID = $referenceSale[0];
             $transactionID = $referenceSale[1];
 
@@ -138,7 +136,7 @@ class IcommercePayuApiController extends BaseApiController
             $order = $this->order->find($orderID);
 
             // Not PROCESSED and CANCELED
-            if($order->order_status!=13 && $order->order_status!=3){
+            if($order->status_id == 1){
 
                 $signature = $this->icommercepayu->signatureGeneration($paymentMethod->options->apiKey,$request->merchant_id,$request->reference_sale,$request->value,$request->currency,$request->state_pol);
 
@@ -179,22 +177,26 @@ class IcommercePayuApiController extends BaseApiController
 
                 // Update Transaction
                 $transaction = $this->validateResponseApi(
-                    $this->transactionController->update($transactionID,new Request([
+                    $this->transactionController->update($transactionID,new Request(
+                      ["attributes" => [
                         'order_id' => $order->id,
                         'payment_method_id' => $paymentMethod->id,
                         'amount' => $order->total,
                         'status' => $newstatusOrder,
                         'external_status' => $external_status,
                         'external_code' => $external_code 
+                      ]
                     ]))
                 );
 
-                // Update Order Process 
+                // Update Order Process
                 $orderUP = $this->validateResponseApi(
-                    $this->orderController->update($order->id,new Request([
+                    $this->orderController->update($order->id,new Request(
+                      ["attributes" =>[
                         'order_id' => $order->id,
-                        'status_id' => $newstatusOrder,
-                    ]))
+                        'status_id' => $newstatusOrder
+                      ]
+                      ]))
                 );
                     
                  // Check order
@@ -255,7 +257,7 @@ class IcommercePayuApiController extends BaseApiController
         
         }
 
-        return response()->json($response, $status ?? 200);
+        return response()->json($response ?? [], $status ?? 200);
         
 
     }

@@ -114,7 +114,8 @@ class PublicController extends BasePublicController
             
             $payU->executeRedirection();
             
-           
+           \Log::info("payu object");
+           \Log::info([$payU]);
             //========= Testing
             /*
             $client = new \GuzzleHttp\Client();
@@ -164,31 +165,44 @@ class PublicController extends BasePublicController
         }
    
     }
-
-
-     /**
-     * Button Back PayU
-     * @param  Request $request
-     * @return redirect
-     */
-    public function back(Request $request){
-
-        if(isset($request->referenceCode)){
-
-            $referenceSale = explode('-',$request->referenceCode);
-            $order = $this->order->find($referenceSale[0]);
-
-            if (!empty($order))
-                return redirect()->route('icommerce.order.showorder', [$order->id, $order->key]);
-            else
-                return redirect()->route('homepage');
-                 
-
-        }else{
-            return redirect()->route('homepage');
-        }
-       
+  
+  
+  /**
+   * Button Back PayU
+   * @param  Request $request
+   * @return redirect
+   */
+  public function back(Request $request){
+    $isQuasarAPP = env("QUASAR_APP", false);
+    if(isset($request->referenceCode)){
+      
+      $referenceSale = explode('-',$request->referenceCode);
+      $order = $this->order->find($referenceSale[0]);
+      
+      
+      if(!$isQuasarAPP){
+        if (!empty($order))
+          return redirect()->route('icommerce.order.showorder', [$order->id, $order->key]);
+        else
+          return redirect()->route('homepage');
+        
+      }else{
+        return view('icommerce::frontend.orders.closeWindow');
+      }
+      
+      
+    }else{
+      if(!$isQuasarAPP){
+        return redirect()->route('homepage');
+      }else{
+        return view('icommerce::frontend.orders.closeWindow');
+      }
     }
+    
+  }
+  
+  
+  
     
     /*
     public function setSignature($apiKey,$merchantId,$referenceCode,$amount,$currency){
