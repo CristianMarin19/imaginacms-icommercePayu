@@ -59,7 +59,7 @@ class IcommercePayuApiController extends BaseApiController
      */
     public function init(Request $request){
 
-       
+        
        // try {
 
             $orderID = $request->orderID;
@@ -116,7 +116,7 @@ class IcommercePayuApiController extends BaseApiController
     /**
      * Response Api Method
      * @param Requests request
-     * @return route
+     * @return route 
      */
     public function response(Request $request){
 
@@ -153,7 +153,7 @@ class IcommercePayuApiController extends BaseApiController
 
                         $newstatusOrder = 7; // Status Order Failed
                         
-                    } else if($transactionState == 6 && $polResponseCode == 4){
+                    } else if($transactionState == 6 && $polResponseCode == 4){ 
 
                         $newstatusOrder = 8; // Status Order Refunded
                        
@@ -164,110 +164,110 @@ class IcommercePayuApiController extends BaseApiController
                     } else if($transactionState == 4 && $polResponseCode == 1){
 
                         $newstatusOrder = 13; // Status Order Processed
-                        
-                    }else{
+                           
+                    }else{ 
 
                         $newstatusOrder = 7; // Status Order Failed
                     }
 
                 }else{
         
-        $newstatusOrder = 7; // Status Order Failed
+                    $newstatusOrder = 7; // Status Order Failed
         
-      }
-      
-      $external_status = $transactionState;
-      $external_code = $polResponseCode;
-      
-      // Update Transaction
-      $transaction = $this->validateResponseApi(
-        $this->transactionController->update($transactionID,new Request(
-          ["attributes" => [
-            'order_id' => $order->id,
-            'payment_method_id' => $paymentMethod->id,
-            'amount' => $order->total,
-            'status' => $newstatusOrder,
-            'external_status' => $external_status,
-            'external_code' => $external_code
-          ]
-          ]))
-      );
-      
-      // Update Order Process
-      $orderUP = $this->validateResponseApi(
-        $this->orderController->update($order->id,new Request(
-          ["attributes" =>[
-            'order_id' => $order->id,
-            'status_id' => $newstatusOrder
-          ]
-          ]))
-      );
-      
-      // Check order
-      if (!empty($order))
-        $redirectRoute = route('icommerce.order.showorder', [$order->id, $order->key]);
-      else
-        if(!$isQuasarAPP) {
-          $redirectRoute = route('homepage');
-        }else{
+                }
+
+                $external_status = $transactionState;
+                $external_code = $polResponseCode;
+
+                // Update Transaction
+                $transaction = $this->validateResponseApi(
+                    $this->transactionController->update($transactionID,new Request(
+                      ["attributes" => [
+                        'order_id' => $order->id,
+                        'payment_method_id' => $paymentMethod->id,
+                        'amount' => $order->total,
+                        'status' => $newstatusOrder,
+                        'external_status' => $external_status,
+                        'external_code' => $external_code 
+                      ]
+                    ]))
+                );
+
+                // Update Order Process
+                $orderUP = $this->validateResponseApi(
+                    $this->orderController->update($order->id,new Request(
+                      ["attributes" =>[
+                        'order_id' => $order->id,
+                        'status_id' => $newstatusOrder
+                      ]
+                      ]))
+                );
+                    
+                 // Check order
+                if (!empty($order))
+                    $redirectRoute = route('icommerce.order.showorder', [$order->id, $order->key]);
+                else
+                  if(!$isQuasarAPP) {
+                    $redirectRoute = route('homepage');
+                  }else{
+                  
+                  }
+               
+
+                // Response
+                $response = [ 'data' => [
+                    "redirectRoute" => $redirectRoute
+                ]];
+                
+           
+            } // End if Not Processed and Canceled
+
+
+      /*  } catch (\Exception $e) {
+
+            // Get IDS
+            $referenceSale = explode('-',$request->reference_sale);
+            $orderID = $referenceSale[0];
+            $transactionID = $referenceSale[1];
+
+            if(!empty($transactionID)){
+
+                $newstatusOrder = 3; // Canceled
+
+                // Update Transaction
+                $transactionUP = $this->validateResponseApi(
+                    $this->transactionController->update($transactionID,new Request([
+                        'status' => $newstatusOrder,
+                        'external_status' => "canceled",
+                        'external_code' => $e->getCode()
+                    ]))
+                );
+
+                // Update Order Process 
+                $orderUP = $this->validateResponseApi(
+                    $this->orderController->update($orderID,new Request([
+                        'status_id' => $newstatusOrder,
+                    ]))
+                );
+            }
+
+            //Message Error
+            $status = 500;
+
+            $response = [
+              'errors' => $e->getMessage(),
+              'code' => $e->getCode()
+            ];
+
+            //Log Error
+            \Log::error('Module Icommercepayu: Message: '.$e->getMessage());
+            \Log::error('Module Icommercepayu: Code: '.$e->getCode());
         
-        }
-      
-      
-      // Response
-      $response = [ 'data' => [
-        "redirectRoute" => $redirectRoute
-      ]];
-      
-      
-    } // End if Not Processed and Canceled
-    
-    
-    /*  } catch (\Exception $e) {
+        }*/
 
-          // Get IDS
-          $referenceSale = explode('-',$request->reference_sale);
-          $orderID = $referenceSale[0];
-          $transactionID = $referenceSale[1];
+        return response()->json($response ?? [], $status ?? 200);
+        
 
-          if(!empty($transactionID)){
+    }
 
-              $newstatusOrder = 3; // Canceled
-
-              // Update Transaction
-              $transactionUP = $this->validateResponseApi(
-                  $this->transactionController->update($transactionID,new Request([
-                      'status' => $newstatusOrder,
-                      'external_status' => "canceled",
-                      'external_code' => $e->getCode()
-                  ]))
-              );
-
-              // Update Order Process
-              $orderUP = $this->validateResponseApi(
-                  $this->orderController->update($orderID,new Request([
-                      'status_id' => $newstatusOrder,
-                  ]))
-              );
-          }
-
-          //Message Error
-          $status = 500;
-
-          $response = [
-            'errors' => $e->getMessage(),
-            'code' => $e->getCode()
-          ];
-
-          //Log Error
-          \Log::error('Module Icommercepayu: Message: '.$e->getMessage());
-          \Log::error('Module Icommercepayu: Code: '.$e->getCode());
-      
-      }*/
-    
-    return response()->json($response ?? [], $status ?? 200);
-    
-    
-  }
-  
 }

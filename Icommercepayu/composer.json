@@ -1,5 +1,5 @@
 {
-    "name": "imagina/icommercepayu",
+    "name": "vendor/icommercepayu",
     "description": "",
     "type": "asgard-module",
     "license": "MIT",
@@ -7,7 +7,7 @@
         "php": ">=7.0.0",
         "composer/installers": "~1.0",
         "idavoll/core-module": "~3.0",
-        "imagina/icommerce": "dev-1.0.0"
+        "vendor/icommerce": "dev-1.0.0"
     },
     "require-dev": {
         "phpunit/phpunit": "~6.0",
