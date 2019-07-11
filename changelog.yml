@@ -1,5 +1,11 @@
-url: https://github.com/imagina/iact.git
+url: https://github.com/imagina/asgardcms-icommercepayu
 versions:
+ "1.0.3":
+    Changed:
+      - Updated Seeder
+      - Changes variables Init
+      - Changes on Response
+      - Others fixes
   "1.0.0":
     added:
       - Inital Version Icommerce Payu Payment Method

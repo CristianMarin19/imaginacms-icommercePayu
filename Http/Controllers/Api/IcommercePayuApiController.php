@@ -60,7 +60,7 @@ class IcommercePayuApiController extends BaseApiController
     public function init(Request $request){
 
        
-       // try {
+        try {
 
             $orderID = $request->orderID;
             \Log::info('Module Icommercepayu: Init-ID:'.$orderID);
@@ -100,13 +100,13 @@ class IcommercePayuApiController extends BaseApiController
             ]];
             
             
-       /*   } catch (\Exception $e) {
+          } catch (\Exception $e) {
             //Message Error
             $status = 500;
             $response = [
               'errors' => $e->getMessage()
             ];
-        }*/
+        }
 
        
         return response()->json($response, $status ?? 200);
@@ -120,34 +120,38 @@ class IcommercePayuApiController extends BaseApiController
      */
     public function response(Request $request){
 
-     //   try {
+      try {
 
-            \Log::info('Module Icommercepayu: Response - '.time());
+        \Log::info('Module Icommercepayu: Response - '.time());
 
-            // Configuration
-            $paymentName = config('asgard.icommercepayu.config.paymentName');
-            $attribute = array('name' => $paymentName);
-            $paymentMethod = $this->paymentMethod->findByAttributes($attribute);
+        // Configuration
+        $paymentName = config('asgard.icommercepayu.config.paymentName');
+        $attribute = array('name' => $paymentName);
+        $paymentMethod = $this->paymentMethod->findByAttributes($attribute);
             
-            // Get IDS
-            \Log::info("reference_sale");
-            \Log::info([$request->reference_sale]);
-            $referenceSale = explode('-',$request->reference_sale);
-            $orderID = $referenceSale[0];
-            $transactionID = $referenceSale[1];
+        // Get IDS
+        $referenceSale = explode('-',$request->reference_sale);
+        $orderID = $referenceSale[0];
+        $transactionID = $referenceSale[1];
 
-            // Order
-            $order = $this->order->find($orderID);
+        \Log::info('Module Icommercepayu: Response - orderID '.$orderID);
 
+        // Order
+        $order = $this->order->find($orderID);
 
-            if($order->order_status==1){
+        \Log::info('Module Icommercepayu: Response - Order Status '.$order->status_id);
 
-                $signature = $this->icommercepayu->signatureGeneration($paymentMethod->options->apiKey,$request->merchant_id,$request->reference_sale,$request->value,$request->currency,$request->state_pol);
+        // Status Order 'Proccesing'
+        if($order->status_id==1){
 
-                $transactionState = $request->state_pol;
-                $polResponseCode = $request->response_code_pol;
+          \Log::info('Module Icommercepayu: Response - Actualizando orderID: '.$orderID);
 
-                if (strtoupper($signature) == strtoupper($request->sign)) {
+          $signature = $this->icommercepayu->signatureGeneration($paymentMethod->options->apikey,$request->merchant_id,$request->reference_sale,$request->value,$request->currency,$request->state_pol);
+
+          $transactionState = $request->state_pol;
+          $polResponseCode = $request->response_code_pol;
+
+          if (strtoupper($signature) == strtoupper($request->sign)) {
 
                     if($transactionState == 6 && $polResponseCode == 5){
 
@@ -170,60 +174,48 @@ class IcommercePayuApiController extends BaseApiController
                         $newstatusOrder = 7; // Status Order Failed
                     }
 
-                }else{
+          }else{
         
-        $newstatusOrder = 7; // Status Order Failed
-        
-      }
+            $newstatusOrder = 7; // Status Order Failed
       
-      $external_status = $transactionState;
-      $external_code = $polResponseCode;
+          }
       
-      // Update Transaction
-      $transaction = $this->validateResponseApi(
-        $this->transactionController->update($transactionID,new Request(
-          ["attributes" => [
-            'order_id' => $order->id,
-            'payment_method_id' => $paymentMethod->id,
-            'amount' => $order->total,
-            'status' => $newstatusOrder,
-            'external_status' => $external_status,
-            'external_code' => $external_code
-          ]
-          ]))
-      );
+          \Log::info('Module Icommercepayu: Response - New Status Order: '.$newstatusOrder);
+
+          $external_status = $transactionState;
+          $external_code = $polResponseCode;
+
+          // Update Transaction
+          $transaction = $this->validateResponseApi(
+            $this->transactionController->update($transactionID,new Request(
+              ["attributes" => [
+                'order_id' => $order->id,
+                'payment_method_id' => $paymentMethod->id,
+                'amount' => $order->total,
+                'status' => $newstatusOrder,
+                'external_status' => $external_status,
+                'external_code' => $external_code
+              ]
+              ]))
+          );      
       
-      // Update Order Process
-      $orderUP = $this->validateResponseApi(
-        $this->orderController->update($order->id,new Request(
-          ["attributes" =>[
-            'order_id' => $order->id,
-            'status_id' => $newstatusOrder
-          ]
-          ]))
-      );
-      
-      // Check order
-      if (!empty($order))
-        $redirectRoute = route('icommerce.order.showorder', [$order->id, $order->key]);
-      else
-        if(!$isQuasarAPP) {
-          $redirectRoute = route('homepage');
-        }else{
-        
-        }
-      
-      
-      // Response
-      $response = [ 'data' => [
-        "redirectRoute" => $redirectRoute
-      ]];
-      
-      
-    } // End if Not Processed and Canceled
+          // Update Order Process
+          $orderUP = $this->validateResponseApi(
+            $this->orderController->update($order->id,new Request(
+              ["attributes" =>[
+                'order_id' => $order->id,
+                'status_id' => $newstatusOrder
+              ]
+              ]))
+          );    
+           
+        } // End if Not Processed and Canceled
     
-    
-    /*  } catch (\Exception $e) {
+        \Log::info('Module Icommercepayu: Response - END');
+
+      } catch (\Exception $e) {
+
+        \Log::info('Module Icommercepayu: Exception');
 
           // Get IDS
           $referenceSale = explode('-',$request->reference_sale);
@@ -237,16 +229,20 @@ class IcommercePayuApiController extends BaseApiController
               // Update Transaction
               $transactionUP = $this->validateResponseApi(
                   $this->transactionController->update($transactionID,new Request([
-                      'status' => $newstatusOrder,
-                      'external_status' => "canceled",
-                      'external_code' => $e->getCode()
+                    "attributes" => [
+                        'status' => $newstatusOrder,
+                        'external_status' => "canceled",
+                        'external_code' => $e->getCode()
+                    ]
                   ]))
               );
 
               // Update Order Process
               $orderUP = $this->validateResponseApi(
-                  $this->orderController->update($orderID,new Request([
+                  $this->orderController->update($orderID,new Request(
+                    ["attributes" =>[
                       'status_id' => $newstatusOrder,
+                    ]
                   ]))
               );
           }
@@ -263,11 +259,13 @@ class IcommercePayuApiController extends BaseApiController
           \Log::error('Module Icommercepayu: Message: '.$e->getMessage());
           \Log::error('Module Icommercepayu: Code: '.$e->getCode());
       
-      }*/
-    
-    return response()->json($response ?? [], $status ?? 200);
-    
+      }
+      
+      return response('Recibido', 200);
+
     
   }
+
+
   
 }

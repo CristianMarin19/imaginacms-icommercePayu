@@ -97,9 +97,9 @@ class PublicController extends BasePublicController
             else
                 $payU->setUrlgate($this->urlProduction);
 
-            $payU->setMerchantid($paymentMethod->options->merchantId);
-            $payU->setAccountid($paymentMethod->options->accountId);
-            $payU->setApikey($paymentMethod->options->apiKey);
+            $payU->setMerchantid($paymentMethod->options->merchantid);
+            $payU->setAccountid($paymentMethod->options->accountid);
+            $payU->setApikey($paymentMethod->options->apikey);
             $payU->setReferenceCode($orderID); // OrderID
             $payU->setDescription($restDescription); //DESCRIPCION
             $payU->setAmount($order->total);
@@ -113,38 +113,7 @@ class PublicController extends BasePublicController
             $payU->setResponseUrl(Route("icommercepayu.back"));
             
             $payU->executeRedirection();
-            
-           \Log::info("payu object");
-           \Log::info([$payU]);
-            //========= Testing
-            /*
-            $client = new \GuzzleHttp\Client();
-
-            $signature = $this->setSignature($paymentMethod->options->apiKey,$paymentMethod->options->merchantId,$orderID,$order->total,$currency->code);
-           
-            $res = $client->request('GET', $this->urlSandbox, [
-                'form_params' => [
-                    'merchantId' => $paymentMethod->options->merchantId,
-                    'accountId' => $paymentMethod->options->accountId,
-                    'description' => $restDescription,
-                    'referenceCode' => $orderID,
-                    'amount' => $order->total,
-                    'tax' => 0,
-                    'taxReturnBase' => 0,
-                    'currency' => $currency->code,
-                    'lng' => locale(),
-                    'test' => $paymentMethod->options->test,
-                    'buyerEmail' => $order->email,
-                    'signature' => $signature,
-                    'responseUrl' => Route("icommercepayu.back"),
-                    'confirmationUrl' => Route("icommercepayu.api.payu.response")
-                ]
-            ]);
-
-            dd($res);
-            */
-            
-            
+             
 
         } catch (\Exception $e) {
 
@@ -158,9 +127,7 @@ class PublicController extends BasePublicController
               'code' => $e->getCode()
             ];
 
-            //return response()->json($response, $status ?? 200);
-
-            return redirect()->route("icommercepayu.api.payu.response");
+            return redirect()->route("homepage");
 
         }
    
@@ -173,7 +140,9 @@ class PublicController extends BasePublicController
    * @return redirect
    */
   public function back(Request $request){
+
     $isQuasarAPP = env("QUASAR_APP", false);
+
     if(isset($request->referenceCode)){
       
       $referenceSale = explode('-',$request->referenceCode);
@@ -201,16 +170,4 @@ class PublicController extends BasePublicController
     
   }
   
-  
-  
-    
-    /*
-    public function setSignature($apiKey,$merchantId,$referenceCode,$amount,$currency){
-
-        return md5($apiKey."~".$merchantId."~".$referenceCode."~".$amount.'~'.$currency);
-    
-    }
-    */
-
-   
 }
