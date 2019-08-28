@@ -1,7 +1,10 @@
 url: https://github.com/imagina/asgardcms-icommercepayu
 versions:
- "1.0.3":
-    Changed:
+  "1.0.4":
+    added:
+      - IcomercepayuDatabaseSender Class
+  "1.0.3":
+    changed:
       - Updated Seeder
       - Changes variables Init
       - Changes on Response
