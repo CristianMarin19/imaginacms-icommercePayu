@@ -3,7 +3,7 @@
     "alias": "icommercepayu",
     "description": "PayU- PaymentMethod Module to Icommerce",
     "keywords": [],
-    "version": "1.0.5",
+    "version": "1.0.6",
 	"active": 1,
     "order": 1,
     "providers": [
