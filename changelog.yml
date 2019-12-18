@@ -1,6 +1,10 @@
 url: https://github.com/imagina/asgardcms-icommercepayu
 versions:
-  "1.0.6":
+  "1.0.8":
+      changed:
+        - Seeder Paramaters
+        - Fix camelCase in propieties options
+  "1.0.7":
     changed:
       - Required version of imaigina/icommerce-monule to 1.0.*
   "1.0.6":

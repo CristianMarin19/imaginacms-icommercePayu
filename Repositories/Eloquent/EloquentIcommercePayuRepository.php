@@ -20,7 +20,7 @@ class EloquentIcommercePayuRepository extends EloquentBaseRepository implements 
         //Get data
         $requestimage = $data['mainimage'];
         $requestmerchantId = $data['merchantId'];
-        $requestapilogin = $data['apilogin'];
+        $requestapilogin = $data['apiLogin'];
         $requestapiKey = $data['apiKey'];
         $requestaccountId = $data['accountId'];
         $requestmode = $data['mode'];
@@ -29,7 +29,7 @@ class EloquentIcommercePayuRepository extends EloquentBaseRepository implements 
         // Delete attributes
         unset($data['mainimage']);
         unset($data['merchantId']);
-        unset($data['apilogin']);
+        unset($data['apiLogin']);
         unset($data['apiKey']);
         unset($data['accountId']);
         unset($data['mode']);
@@ -43,7 +43,7 @@ class EloquentIcommercePayuRepository extends EloquentBaseRepository implements 
 
         // Extra data
         $options['merchantId'] = $requestmerchantId;
-        $options['apilogin'] = $requestapilogin;
+        $options['apiLogin'] = $requestapilogin;
         $options['apiKey'] = $requestapiKey;
         $options['accountId'] = $requestaccountId;
         $options['mode'] = $requestmode;

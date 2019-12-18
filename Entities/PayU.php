@@ -35,7 +35,7 @@ class PayU
 
   	private $_setNameForm;
 
-  	function __construct($accountid='',$url='',$apikey='',$test='',$description='',$referenceCode='',$amount='',$tax='',$taxReturnBase='',$shipmentValue='',$currency='',$lng='',$responseUrl='',$buyerEmail='',$merchantid='',$confirmationUrl=''){
+  	function __construct($accountId='',$url='',$apiKey='',$test='',$description='',$referenceCode='',$amount='',$tax='',$taxReturnBase='',$shipmentValue='',$currency='',$lng='',$responseUrl='',$buyerEmail='',$merchantId='',$confirmationUrl=''){
 
        
         $this->setDescription($description);
@@ -43,10 +43,10 @@ class PayU
         $this->setAmount($amount);
         $this->setBuyerEmail($buyerEmail);
         $this->setTest($test);
-        $this->setApikey($apikey);
-        $this->setMerchantid($merchantid);
+        $this->setApikey($apiKey);
+        $this->setMerchantid($merchantId);
         $this->setUrlgate($url);
-        $this->setAccountid($accountid);
+        $this->setAccountid($accountId);
         $this->setCurrency($currency);
 
         $this->setTax($tax);
@@ -98,17 +98,17 @@ class PayU
   public function setTest($test){
        $this->_test = $test;
   }
-  public function setApikey($apikey){
-       $this->_apiKey = $apikey;
+  public function setApikey($apiKey){
+       $this->_apiKey = $apiKey;
   }
-  public function setMerchantid($merchantid){
-        $this->_merchantId = $merchantid;
+  public function setMerchantid($merchantId){
+        $this->_merchantId = $merchantId;
   }
   public function setUrlgate($url){
         $this->_url_action=$url;
   }
-  public function setAccountid($accountid){
-        $this->_accountId = $accountid;
+  public function setAccountid($accountId){
+        $this->_accountId = $accountId;
   }
 
   public function setNameForm($name = 'payForm')

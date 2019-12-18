@@ -19,12 +19,12 @@ class IcommercepayuDatabaseSeeder extends Seeder
 
         $options['init'] = "Modules\Icommercepayu\Http\Controllers\Api\IcommercePayuApiController";
         $options['mainimage'] = null;
-        $options['merchantid'] = "508029";
-        $options['apilogin'] = "pRRXKOl8ikMmt9u";
-        $options['apikey'] = "4Vj8eK4rloUd272L48hsrarnUA";
-        $options['accountid'] = "512321";
-        $options['mode'] = "sandbox";
-        $options['test'] = 1;
+        $options['MerchantId'] = "508029";
+        $options['ApiLogin'] = "pRRXKOl8ikMmt9u";
+        $options['ApiKey'] = "4Vj8eK4rloUd272L48hsrarnUA";
+        $options['AccountId'] = "512321";
+        $options['Mode'] = "sandbox";
+        $options['Test'] = 1;
 
         $titleTrans = 'icommercepayu::icommercepayus.single';
         $descriptionTrans = 'icommercepayu::icommercepayus.description';

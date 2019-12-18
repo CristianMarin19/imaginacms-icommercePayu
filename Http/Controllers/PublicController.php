@@ -97,9 +97,9 @@ class PublicController extends BasePublicController
             else
                 $payU->setUrlgate($this->urlProduction);
 
-            $payU->setMerchantid($paymentMethod->options->merchantid);
-            $payU->setAccountid($paymentMethod->options->accountid);
-            $payU->setApikey($paymentMethod->options->apikey);
+            $payU->setMerchantid($paymentMethod->options->merchantId);
+            $payU->setAccountid($paymentMethod->options->accountId);
+            $payU->setApikey($paymentMethod->options->apiKey);
             $payU->setReferenceCode($orderID); // OrderID
             $payU->setDescription($restDescription); //DESCRIPCION
             $payU->setAmount($order->total);
