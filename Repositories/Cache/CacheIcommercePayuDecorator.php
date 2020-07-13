@@ -19,7 +19,7 @@ class CacheIcommercePayuDecorator extends BaseCacheDecorator implements Icommerc
      *
      * @return mixed
      */
-    public function encriptUrl($parameters,$conf)
+    public function encriptUrl($orderID,$transactionID,$currencyID)
     {
         return $this->remember(function () use ($orderID,$transactionID,$currencyID) {
             return $this->repository->encriptUrl($orderID,$transactionID,$currencyID);

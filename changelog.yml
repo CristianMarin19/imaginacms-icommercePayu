@@ -1,5 +1,8 @@
 url: https://github.com/imagina/asgardcms-icommercepayu
 versions:
+  "1.0.9":
+      Fixed:
+      - Cache Decorator params
   "1.0.8":
       changed:
         - Seeder Paramaters
