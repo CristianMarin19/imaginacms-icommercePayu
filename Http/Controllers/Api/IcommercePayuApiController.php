@@ -50,7 +50,7 @@ class IcommercePayuApiController extends BaseApiController
         $this->currency = $currency;
 
     }
-    
+
     /**
      * Init data
      * @param Requests request
@@ -59,7 +59,7 @@ class IcommercePayuApiController extends BaseApiController
      */
     public function init(Request $request){
 
-       
+
         try {
 
             $orderID = $request->orderID;
@@ -77,7 +77,7 @@ class IcommercePayuApiController extends BaseApiController
 
             // get currency active
             $currency = $this->currency->getActive();
-            
+
             // Create Transaction
             $transaction = $this->validateResponseApi(
                 $this->transactionController->create(new Request( ["attributes" => [
@@ -87,7 +87,7 @@ class IcommercePayuApiController extends BaseApiController
                     'status' => $statusOrder
                 ]]))
             );
-            
+
             // Encri
             $eUrl = $this->icommercepayu->encriptUrl($order->id,$transaction->id,$currency->id);
 
@@ -98,21 +98,21 @@ class IcommercePayuApiController extends BaseApiController
                 "redirectRoute" => $redirectRoute,
                 "external" => true
             ]];
-            
-            
+
+
           } catch (\Exception $e) {
-            //Message Error
+           \Log::error($e);
             $status = 500;
             $response = [
               'errors' => $e->getMessage()
             ];
         }
 
-       
+
         return response()->json($response, $status ?? 200);
-        
+
     }
-    
+
     /**
      * Response Api Method
      * @param Requests request
@@ -128,7 +128,7 @@ class IcommercePayuApiController extends BaseApiController
         $paymentName = config('asgard.icommercepayu.config.paymentName');
         $attribute = array('name' => $paymentName);
         $paymentMethod = $this->paymentMethod->findByAttributes($attribute);
-            
+
         // Get IDS
         $referenceSale = explode('-',$request->reference_sale);
         $orderID = $referenceSale[0];
@@ -146,7 +146,7 @@ class IcommercePayuApiController extends BaseApiController
 
           \Log::info('Module Icommercepayu: Response - Actualizando orderID: '.$orderID);
 
-          $signature = $this->icommercepayu->signatureGeneration($paymentMethod->options->apikey,$request->merchant_id,$request->reference_sale,$request->value,$request->currency,$request->state_pol);
+          $signature = $this->icommercepayu->signatureGeneration($paymentMethod->options->api_key,$request->merchant_id,$request->reference_sale,$request->value,$request->currency,$request->state_pol);
 
           $transactionState = $request->state_pol;
           $polResponseCode = $request->response_code_pol;
@@ -156,11 +156,11 @@ class IcommercePayuApiController extends BaseApiController
                     if($transactionState == 6 && $polResponseCode == 5){
 
                         $newstatusOrder = 7; // Status Order Failed
-                        
+
                     } else if($transactionState == 6 && $polResponseCode == 4){
 
                         $newstatusOrder = 8; // Status Order Refunded
-                       
+
                     } else if($transactionState == 12 && $polResponseCode == 9994){
 
                         $newstatusOrder = 11; // Status Order Pending
@@ -168,18 +168,18 @@ class IcommercePayuApiController extends BaseApiController
                     } else if($transactionState == 4 && $polResponseCode == 1){
 
                         $newstatusOrder = 13; // Status Order Processed
-                        
+
                     }else{
 
                         $newstatusOrder = 7; // Status Order Failed
                     }
 
           }else{
-        
+
             $newstatusOrder = 7; // Status Order Failed
-      
+
           }
-      
+
           \Log::info('Module Icommercepayu: Response - New Status Order: '.$newstatusOrder);
 
           $external_status = $transactionState;
@@ -197,8 +197,8 @@ class IcommercePayuApiController extends BaseApiController
                 'external_code' => $external_code
               ]
               ]))
-          );      
-      
+          );
+
           // Update Order Process
           $orderUP = $this->validateResponseApi(
             $this->orderController->update($order->id,new Request(
@@ -207,10 +207,10 @@ class IcommercePayuApiController extends BaseApiController
                 'status_id' => $newstatusOrder
               ]
               ]))
-          );    
-           
+          );
+
         } // End if Not Processed and Canceled
-    
+
         \Log::info('Module Icommercepayu: Response - END');
 
       } catch (\Exception $e) {
@@ -258,14 +258,14 @@ class IcommercePayuApiController extends BaseApiController
           //Log Error
           \Log::error('Module Icommercepayu: Message: '.$e->getMessage());
           \Log::error('Module Icommercepayu: Code: '.$e->getCode());
-      
+
       }
-      
+
       return response('Recibido', 200);
 
-    
+
   }
 
 
-  
+
 }

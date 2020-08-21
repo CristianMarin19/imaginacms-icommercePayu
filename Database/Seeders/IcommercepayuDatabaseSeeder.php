@@ -18,17 +18,16 @@ class IcommercepayuDatabaseSeeder extends Seeder
         Model::unguard();
 
         $options['init'] = "Modules\Icommercepayu\Http\Controllers\Api\IcommercePayuApiController";
-        $options['mainimage'] = null;
-        $options['MerchantId'] = "508029";
-        $options['ApiLogin'] = "pRRXKOl8ikMmt9u";
-        $options['ApiKey'] = "4Vj8eK4rloUd272L48hsrarnUA";
-        $options['AccountId'] = "512321";
-        $options['Mode'] = "sandbox";
-        $options['Test'] = 1;
+        $options['merchant_id'] = "508029";
+        $options['api_login'] = "pRRXKOl8ikMmt9u";
+        $options['api_key'] = "4Vj8eK4rloUd272L48hsrarnUA";
+        $options['account_id'] = "512321";
+        $options['mode'] = "sandbox";
+        $options['test'] = 1;
 
         $titleTrans = 'icommercepayu::icommercepayus.single';
         $descriptionTrans = 'icommercepayu::icommercepayus.description';
-        
+
         foreach (['en', 'es'] as $locale) {
 
             if($locale=='en'){
@@ -36,12 +35,11 @@ class IcommercepayuDatabaseSeeder extends Seeder
                     'title' => trans($titleTrans),
                     'description' => trans($descriptionTrans),
                     'name' => config('asgard.icommercepayu.config.paymentName'),
-                    'status' => 0,
+                    'active'=>0,
                     'options' => $options
                 );
-
                 $paymentMethod = PaymentMethod::create($params);
-                
+
             }else{
 
                 $title = trans($titleTrans,[],$locale);

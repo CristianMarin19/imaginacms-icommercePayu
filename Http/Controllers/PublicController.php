@@ -23,7 +23,7 @@ use Modules\Icommercepayu\Entities\PayU;
 
 class PublicController extends BasePublicController
 {
-  
+
     private $icommercepayu;
     private $paymentMethod;
     private $order;
@@ -69,7 +69,7 @@ class PublicController extends BasePublicController
             $currencyID = $infor[2];
 
             \Log::info('Module Icommercepayu: Index-ID:'.$orderID);
-            
+
             // Validate get data
             $order = $this->order->find($orderID);
             $transaction = $this->transaction->find($transactionID);
@@ -83,7 +83,7 @@ class PublicController extends BasePublicController
 
             // Order
             $order = $this->order->find($orderID);
-            
+
             $restDescription = "Order:{$orderID} - {$order->email}";
 
             // OrderID Method
@@ -97,9 +97,9 @@ class PublicController extends BasePublicController
             else
                 $payU->setUrlgate($this->urlProduction);
 
-            $payU->setMerchantid($paymentMethod->options->merchantId);
-            $payU->setAccountid($paymentMethod->options->accountId);
-            $payU->setApikey($paymentMethod->options->apiKey);
+            $payU->setMerchantid($paymentMethod->options->merchant_id);
+            $payU->setAccountid($paymentMethod->options->account_id);
+            $payU->setApikey($paymentMethod->options->api_key);
             $payU->setReferenceCode($orderID); // OrderID
             $payU->setDescription($restDescription); //DESCRIPCION
             $payU->setAmount($order->total);
@@ -111,9 +111,9 @@ class PublicController extends BasePublicController
             $payU->setBuyerEmail($order->email);
             $payU->setConfirmationUrl(Route("icommercepayu.api.payu.response"));
             $payU->setResponseUrl(Route("icommercepayu.back"));
-            
+
             $payU->executeRedirection();
-             
+
 
         } catch (\Exception $e) {
 
@@ -127,13 +127,15 @@ class PublicController extends BasePublicController
               'code' => $e->getCode()
             ];
 
-            return redirect()->route("homepage");
+            //return response()->json($response, $status ?? 200);
+
+            return redirect()->route("icommercepayu.api.payu.response");
 
         }
-   
+
     }
-  
-  
+
+
   /**
    * Button Back PayU
    * @param  Request $request
@@ -144,22 +146,22 @@ class PublicController extends BasePublicController
     $isQuasarAPP = env("QUASAR_APP", false);
 
     if(isset($request->referenceCode)){
-      
+
       $referenceSale = explode('-',$request->referenceCode);
       $order = $this->order->find($referenceSale[0]);
-      
-      
+
+
       if(!$isQuasarAPP){
         if (!empty($order))
           return redirect()->route('icommerce.order.showorder', [$order->id, $order->key]);
         else
           return redirect()->route('homepage');
-        
+
       }else{
         return view('icommerce::frontend.orders.closeWindow');
       }
-      
-      
+
+
     }else{
       if(!$isQuasarAPP){
         return redirect()->route('homepage');
@@ -167,7 +169,7 @@ class PublicController extends BasePublicController
         return view('icommerce::frontend.orders.closeWindow');
       }
     }
-    
+
   }
-  
+
 }
