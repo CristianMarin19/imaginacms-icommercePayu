@@ -18,10 +18,11 @@ class IcommercepayuDatabaseSeeder extends Seeder
         Model::unguard();
 
         $options['init'] = "Modules\Icommercepayu\Http\Controllers\Api\IcommercePayuApiController";
-        $options['merchant_id'] = "508029";
-        $options['api_login'] = "pRRXKOl8ikMmt9u";
-        $options['api_key'] = "4Vj8eK4rloUd272L48hsrarnUA";
-        $options['account_id'] = "512321";
+        $options['mainimage'] = null;
+        $options['merchantId'] = "508029";
+        $options['apiLogin'] = "pRRXKOl8ikMmt9u";
+        $options['apiKey'] = "4Vj8eK4rloUd272L48hsrarnUA";
+        $options['accountId'] = "512321";
         $options['mode'] = "sandbox";
         $options['test'] = 1;
 
@@ -35,9 +36,10 @@ class IcommercepayuDatabaseSeeder extends Seeder
                     'title' => trans($titleTrans),
                     'description' => trans($descriptionTrans),
                     'name' => config('asgard.icommercepayu.config.paymentName'),
-                    'active'=>0,
+                    'active' => 0,
                     'options' => $options
                 );
+
                 $paymentMethod = PaymentMethod::create($params);
 
             }else{

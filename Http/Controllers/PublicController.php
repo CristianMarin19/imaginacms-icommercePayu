@@ -97,9 +97,9 @@ class PublicController extends BasePublicController
             else
                 $payU->setUrlgate($this->urlProduction);
 
-            $payU->setMerchantid($paymentMethod->options->merchant_id);
-            $payU->setAccountid($paymentMethod->options->account_id);
-            $payU->setApikey($paymentMethod->options->api_key);
+            $payU->setMerchantid($paymentMethod->options->merchantId);
+            $payU->setAccountid($paymentMethod->options->accountId);
+            $payU->setApikey($paymentMethod->options->apiKey);
             $payU->setReferenceCode($orderID); // OrderID
             $payU->setDescription($restDescription); //DESCRIPCION
             $payU->setAmount($order->total);
@@ -127,9 +127,7 @@ class PublicController extends BasePublicController
               'code' => $e->getCode()
             ];
 
-            //return response()->json($response, $status ?? 200);
-
-            return redirect()->route("icommercepayu.api.payu.response");
+            return redirect()->route("homepage");
 
         }
 
@@ -142,7 +140,7 @@ class PublicController extends BasePublicController
    * @return redirect
    */
   public function back(Request $request){
-
+    $locale = \LaravelLocalization::setLocale() ?: \App::getLocale();
     $isQuasarAPP = env("QUASAR_APP", false);
 
     if(isset($request->referenceCode)){
@@ -153,7 +151,7 @@ class PublicController extends BasePublicController
 
       if(!$isQuasarAPP){
         if (!empty($order))
-          return redirect()->route('icommerce.order.showorder', [$order->id, $order->key]);
+          return redirect()->route( $locale .'.icommerce.order.showorder', [$order->id, $order->key]);
         else
           return redirect()->route('homepage');
 
