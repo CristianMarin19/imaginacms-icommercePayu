@@ -3,6 +3,7 @@ versions:
   "1.0.9":
       chnaged:
         - status by active
+        - Cache Decorator params
   "1.0.8":
       changed:
         - Seeder Paramaters
