@@ -40,6 +40,11 @@
             "dev-master": "4.0.x-dev"
         }
     },
+    "scripts": {
+        "post-install-cmd": [
+            "@php artisan module:seed Icommercepayu"
+        ]
+    },
     "autoload": {
         "psr-4": {
             "Modules\\Icommercepayu\\": ""

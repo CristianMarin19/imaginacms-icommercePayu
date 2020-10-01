@@ -15,11 +15,14 @@ class IcommercepayuDatabaseSeeder extends Seeder
      */
     public function run()
     {
-        Model::unguard();
-  
-      $paymentMethod = PaymentMethod::where("name", config('asgard.icommercepayu.config.paymentName'))->first();
       
-      if(!isset($paymentMethod->id)){
+      Model::unguard();
+  
+      $name = config('asgard.icommercepayu.config.paymentName');
+      $result = PaymentMethod::where('name',$name)->first();
+
+      if(!$result){
+
         $options['init'] = "Modules\Icommercepayu\Http\Controllers\Api\IcommercePayuApiController";
         $options['mainimage'] = null;
         $options['merchantId'] = "508029";
@@ -38,8 +41,8 @@ class IcommercepayuDatabaseSeeder extends Seeder
             $params = array(
               'title' => trans($titleTrans),
               'description' => trans($descriptionTrans),
-              'name' => config('asgard.icommercepayu.config.paymentName'),
-              'status' => 0,
+              'name' => $name,
+              'status' => 1,
               'options' => $options
             );
       
@@ -57,8 +60,12 @@ class IcommercepayuDatabaseSeeder extends Seeder
           }
     
         }// Foreach
-  
+
+      }else{
+
+        $this->command->alert("This method has already been installed !!");
+
       }
-      
+   
     }
 }

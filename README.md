@@ -1,8 +1,10 @@
-# asgardcms-icommercepayu
+# imaginacms-icommercepayu (PaymentMethod)
 
 ## Seeder
 
-    run php artisan module:seed Icommercepayu
+```bash
+php artisan module:seed Icommercepayu
+```
 
 ## Add Except
 
