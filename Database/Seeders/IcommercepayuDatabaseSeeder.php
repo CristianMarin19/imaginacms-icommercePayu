@@ -17,7 +17,7 @@ class IcommercepayuDatabaseSeeder extends Seeder
     {
         Model::unguard();
   
-      $paymentMethod = PaymentMethod::findByAttributes(["name" => config('asgard.icommercepayu.config.paymentName')]);
+      $paymentMethod = PaymentMethod::firstWhere("name", config('asgard.icommercepayu.config.paymentName'));
       
       if(!isset($paymentMethod->id)){
         $options['init'] = "Modules\Icommercepayu\Http\Controllers\Api\IcommercePayuApiController";
