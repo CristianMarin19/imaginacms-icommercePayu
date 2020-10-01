@@ -31,6 +31,7 @@ class IcommercepayuDatabaseSeeder extends Seeder
         $options['accountId'] = "512321";
         $options['mode'] = "sandbox";
         $options['test'] = 1;
+        $options['minimunAmount'] = 12000;
   
         $titleTrans = 'icommercepayu::icommercepayus.single';
         $descriptionTrans = 'icommercepayu::icommercepayus.description';
