@@ -36,7 +36,7 @@ class IcommercepayuDatabaseSeeder extends Seeder
                     'title' => trans($titleTrans),
                     'description' => trans($descriptionTrans),
                     'name' => config('asgard.icommercepayu.config.paymentName'),
-                    'active' => 0,
+                    'status' => 0,
                     'options' => $options
                 );
 
