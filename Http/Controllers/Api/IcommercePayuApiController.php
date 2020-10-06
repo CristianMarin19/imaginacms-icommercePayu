@@ -76,7 +76,7 @@ class IcommercePayuApiController extends BaseApiController
             $statusOrder = 1; // Processing
 
             // Validate minimum amount order
-            if($order->total<$paymentMethod->options->minimunAmount)
+            if(isset($paymentMethod->options->minimunAmount) && $order->total<$paymentMethod->options->minimunAmount)
               throw new Exception('Total order minimum not allowed', 204);
 
             // get currency active
