@@ -3,6 +3,7 @@
 namespace Modules\Icommercepayu\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Arr;
 use Modules\Core\Traits\CanPublishConfiguration;
 use Modules\Core\Events\BuildingSidebar;
 use Modules\Core\Events\LoadingBackendTranslations;
@@ -29,7 +30,7 @@ class IcommercepayuServiceProvider extends ServiceProvider
         $this->app['events']->listen(BuildingSidebar::class, RegisterIcommercepayuSidebar::class);
 
         $this->app['events']->listen(LoadingBackendTranslations::class, function (LoadingBackendTranslations $event) {
-            $event->load('icommercepayus', array_dot(trans('icommercepayu::icommercepayus')));
+            $event->load('icommercepayus', Arr::dot(trans('icommercepayu::icommercepayus')));
             // append translations
 
         });

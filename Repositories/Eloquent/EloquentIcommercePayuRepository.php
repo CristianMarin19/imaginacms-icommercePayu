@@ -2,6 +2,7 @@
 
 namespace Modules\Icommercepayu\Repositories\Eloquent;
 
+use Illuminate\Support\Str;
 use Modules\Icommercepayu\Repositories\IcommercePayuRepository;
 use Modules\Core\Repositories\Eloquent\EloquentBaseRepository;
 
@@ -71,7 +72,7 @@ class EloquentIcommercePayuRepository extends EloquentBaseRepository implements 
             return $value;
         }
         // if a base64 was sent, store it in the db
-        if (starts_with($value, 'data:image'))
+        if (Str::startsWith($value, 'data:image'))
         {
             // 0. Make the image
             $image = \Image::make($value);
