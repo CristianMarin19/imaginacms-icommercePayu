@@ -105,7 +105,7 @@ class IcommercePayuApiController extends BaseApiController
 
 
           } catch (\Exception $e) {
-           \Log::error($e);
+           \Log::error($e->getMessage());
             $status = 500;
             $response = [
               'errors' => $e->getMessage()
