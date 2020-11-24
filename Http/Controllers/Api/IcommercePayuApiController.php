@@ -150,7 +150,7 @@ class IcommercePayuApiController extends BaseApiController
 
           \Log::info('Module Icommercepayu: Response - Actualizando orderID: '.$orderID);
 
-          $signature = $this->icommercepayu->signatureGeneration($paymentMethod->options->apikey,$request->merchant_id,$request->reference_sale,$request->value,$request->currency,$request->state_pol);
+          $signature = $this->icommercepayu->signatureGeneration($paymentMethod->options->apiKey,$request->merchant_id,$request->reference_sale,$request->value,$request->currency,$request->state_pol);
 
           $transactionState = $request->state_pol;
           $polResponseCode = $request->response_code_pol;
