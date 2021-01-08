@@ -30,6 +30,7 @@ return [
     'form' => [
     ],
     'messages' => [
+        'minimum' => 'Total order minimum not allowed'
     ],
     'validation' => [
     ],
