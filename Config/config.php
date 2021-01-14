@@ -57,7 +57,7 @@ return [
             'value' => 'Modules\Icommercepayu\Http\Controllers\Api\IcommercePayuApiController',
             'name' => 'init',
             'isFakeField' => true
-        ]
+        ],
         'merchantId' => [
         	'value' => null,
             'name' => 'merchantId',
