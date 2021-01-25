@@ -11,6 +11,7 @@ return [
             'value' => null,
             'name' => 'title',
             'type' => 'input',
+            'isTranslatable' => true,
             'props' => [
                 'label' => 'icommerce::common.title'
             ]
@@ -19,6 +20,7 @@ return [
             'value' => null,
             'name' => 'description',
             'type' => 'input',
+            'isTranslatable' => true,
             'props' => [
                 'label' => 'icommerce::common.description',
                 'type' => 'textarea',
@@ -26,7 +28,7 @@ return [
             ]
         ],
         'status' => [
-            'value' => '0',
+            'value' => 0,
             'name' => 'status',
             'type' => 'select',
             'props' => [
@@ -37,8 +39,8 @@ return [
               'hideDropdownIcon' => true,
               'newValueMode' => 'add-unique',
               'options' => [
-                ['label' => 'Activo','value' => '1'],
-                ['label' => 'Inactivo','value' => '0'],
+                ['label' => 'Activo','value' => 1],
+                ['label' => 'Inactivo','value' => 0],
               ]
             ]
         ],
@@ -125,8 +127,8 @@ return [
               'hideDropdownIcon' => true,
               'newValueMode' => 'add-unique',
               'options' => [
-                ['label' => 'Activo','value' => '1'],
-                ['label' => 'Inactivo','value' => '0'],
+                ['label' => 'Activo','value' => 1],
+                ['label' => 'Inactivo','value' => 0],
               ]
             ]
         ],
