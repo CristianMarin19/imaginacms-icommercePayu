@@ -40,6 +40,7 @@ class IcommercepayuServiceProvider extends ServiceProvider
     {
         $this->publishConfig('icommercepayu', 'permissions');
         $this->publishConfig('icommercepayu', 'config');
+        $this->publishConfig('icommercepayu', 'crud-fields');
 
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
     }
