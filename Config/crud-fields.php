@@ -126,6 +126,15 @@ return [
                 ['label' => 'Inactivo','value' => 0],
               ]
             ]
+        ],
+        'minimunAmount' => [
+          'value' => null,
+          'name' => 'minimunAmount',
+          'isFakeField' => true,
+          'type' => 'input',
+          'props' => [
+                'label' => 'icommerce::common.minimum Amount'
+          ]
         ]
 
   ]
