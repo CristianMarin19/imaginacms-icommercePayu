@@ -151,7 +151,7 @@ class PublicController extends BasePublicController
 
       if(!$isQuasarAPP){
         if (!empty($order))
-          return redirect()->route( $locale .'.icommerce.order.showorder', [$order->id, $order->key]);
+          return redirect($order->url);
         else
           return redirect()->route('homepage');
 
