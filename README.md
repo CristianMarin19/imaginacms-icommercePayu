@@ -1,16 +1,20 @@
 # imaginacms-icommercepayu (PaymentMethod)
 
+## Install
+```bash
+composer require imagina/icommercepayu-module=v8.x-dev
+```
+
+## Enable the module
+```bash
+php artisan module:enable Icommercepayu
+```
+
 ## Seeder
 
 ```bash
 php artisan module:seed Icommercepayu
 ```
-
-## Add Except
-
-    1. Go to app/http/middleware/VerifyCsrfToken
-    2. add this:
-        protected $except = [ 'api/icommercepayu/response' ];
 
 ## Configurations
 
@@ -20,12 +24,7 @@ php artisan module:seed Icommercepayu
     - accountId
     - Allow use of Test Credit Cards
 
-## API
+## Production
 
-### Init (Parameters = orderID)
-    
-    https://mydomain/api/icommercepayu
-
-
-
-
+    - Confirmation URL:
+         https://mydomain/api/icommercepayu/response
