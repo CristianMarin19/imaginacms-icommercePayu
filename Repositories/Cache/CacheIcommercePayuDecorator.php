@@ -14,6 +14,14 @@ class CacheIcommercePayuDecorator extends BaseCacheDecorator implements Icommerc
         $this->repository = $icommercepayu;
     }
 
+
+    public function calculate($parameters,$conf)
+    {
+        return $this->remember(function () use ($parameters,$conf) {
+            return $this->repository->calculate($parameters, $conf);
+        });
+    }
+
     /**
      * List or resources
      *

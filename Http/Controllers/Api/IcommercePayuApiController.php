@@ -270,6 +270,34 @@ class IcommercePayuApiController extends BaseApiController
 
   }
 
+    /**
+    * Init Calculations
+    * @param Requests request
+    * @return mixed
+    */
+    public function calculations(Request $request)
+    {
+      
+      try {
+        
+        // Configuration
+        $paymentName = config('asgard.icommercepayu.config.paymentName');
+        $attribute = array('name' => $paymentName);
+        $paymentMethod = $this->paymentMethod->findByAttributes($attribute);
+        $response = $this->icommercepayu->calculate($request->all(), $paymentMethod->options);
+        
+      } catch (\Exception $e) {
+        //Message Error
+        $status = 500;
+        $response = [
+          'errors' => $e->getMessage()
+        ];
+      }
+      
+      return response()->json($response, $status ?? 200);
+    
+  }
+
 
 
 }
