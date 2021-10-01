@@ -97,7 +97,7 @@ return [
             'isFakeField' => true,
             'type' => 'select',
             'props' => [
-              'label' => 'icommercepayu::icommercepayus.table.mode',
+              'label' => 'icommerce::common.formFields.mode',
               'useInput' => false,
               'useChips' => false,
               'multiple' => false,
