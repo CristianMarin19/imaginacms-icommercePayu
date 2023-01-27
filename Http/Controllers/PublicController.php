@@ -48,7 +48,7 @@ class PublicController extends BasePublicController
         $this->transaction = $transaction;
         $this->currency = $currency;
 
-        $this->urlSandbox = "https://sandbox.gateway.payulatam.com/ppp-web-gateway/";
+        $this->urlSandbox = "https://sandbox.checkout.payulatam.com/ppp-web-gateway-payu/";
         $this->urlProduction = "https://checkout.payulatam.com/ppp-web-gateway-payu/";
     }
 
