@@ -109,7 +109,7 @@ class PublicController extends BasePublicController
             $payU->setTest($paymentMethod->options->test);
             $payU->setLng(locale()); // Idioma
             $payU->setBuyerEmail($order->email);
-            $payU->setConfirmationUrl(Route("icommercepayu.api.payu.response"));
+            $payU->setConfirmationUrl(Route("icommercepayu.api.post.payu.response"));
             $payU->setResponseUrl(Route("icommercepayu.back"));
 
             $payU->executeRedirection();
