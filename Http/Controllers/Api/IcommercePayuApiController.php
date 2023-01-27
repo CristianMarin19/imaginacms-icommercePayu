@@ -63,7 +63,7 @@ class IcommercePayuApiController extends BaseApiController
         try {
 
             $orderID = $request->orderID;
-            \Log::info('Module Icommercepayu: Init-ID:'.$orderID);
+            \Log::info('Icommercepayu: Init|orderID:'.$orderID);
 
             $paymentName = config('asgard.icommercepayu.config.paymentName');
 
@@ -102,7 +102,8 @@ class IcommercePayuApiController extends BaseApiController
                 "redirectRoute" => $redirectRoute,
                 "external" => true
             ]];
-
+            
+            \Log::info('Icommercepayu: Init|Finished');
 
           } catch (\Exception $e) {
            \Log::error($e->getMessage());

@@ -68,7 +68,7 @@ class PublicController extends BasePublicController
             $transactionID = $infor[1];
             $currencyID = $infor[2];
 
-            \Log::info('Module Icommercepayu: Index-ID:'.$orderID);
+            \Log::info('Icommercepayu: Index|orderId:'.$orderID);
 
             // Validate get data
             $order = $this->order->find($orderID);
@@ -112,13 +112,15 @@ class PublicController extends BasePublicController
             $payU->setConfirmationUrl(Route("icommercepayu.api.post.payu.response"));
             $payU->setResponseUrl(Route("icommercepayu.back"));
 
+            \Log::info('Icommercepayu: Index|Finished');
+
             $payU->executeRedirection();
 
 
         } catch (\Exception $e) {
 
-            \Log::error('Module Icommercepayu-Index: Message: '.$e->getMessage());
-            \Log::error('Module Icommercepayu-Index: Code: '.$e->getCode());
+            \Log::error('Icommercepayu: Index|Message: '.$e->getMessage());
+            \Log::error('Icommercepayu: Index|Code: '.$e->getCode());
 
             //Message Error
             $status = 500;
