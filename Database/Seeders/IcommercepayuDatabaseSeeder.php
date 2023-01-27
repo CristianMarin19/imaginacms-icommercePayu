@@ -47,7 +47,8 @@ class IcommercepayuDatabaseSeeder extends Seeder
         $params = array(
           'name' => $name,
           'status' => 1,
-          'options' => $options
+          'options' => $options,
+          'organization_id' => isset(tenant()->id) ? tenant()->id : null
         );
         $paymentMethod = PaymentMethod::create($params);
 
