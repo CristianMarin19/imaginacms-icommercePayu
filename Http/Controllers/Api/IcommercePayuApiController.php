@@ -127,7 +127,7 @@ class IcommercePayuApiController extends BaseApiController
 
       try {
 
-        \Log::info('Module Icommercepayu: Response - '.time());
+        \Log::info('Icommercepayu: Response|time: '.time());
 
         // Configuration
         $paymentName = config('asgard.icommercepayu.config.paymentName');
@@ -139,17 +139,17 @@ class IcommercePayuApiController extends BaseApiController
         $orderID = $referenceSale[0];
         $transactionID = $referenceSale[1];
 
-        \Log::info('Module Icommercepayu: Response - orderID '.$orderID);
+        \Log::info('Icommercepayu: Response|orderID:'.$orderID);
 
         // Order
         $order = $this->order->find($orderID);
 
-        \Log::info('Module Icommercepayu: Response - Order Status '.$order->status_id);
+        \Log::info('Icommercepayu: Response|OrderStatusId '.$order->status_id);
 
         // Status Order 'Proccesing'
         if($order->status_id==1){
 
-          \Log::info('Module Icommercepayu: Response - Actualizando orderID: '.$orderID);
+          \Log::info('Icommercepayu: Response|Actualizando orderID: '.$orderID);
 
           $signature = $this->icommercepayu->signatureGeneration($paymentMethod->options->apiKey,$request->merchant_id,$request->reference_sale,$request->value,$request->currency,$request->state_pol);
 
@@ -185,7 +185,7 @@ class IcommercePayuApiController extends BaseApiController
 
           }
 
-          \Log::info('Module Icommercepayu: Response - New Status Order: '.$newstatusOrder);
+          \Log::info('Icommercepayu: Response|New Status Order: '.$newstatusOrder);
 
           $external_status = $transactionState;
           $external_code = $polResponseCode;
@@ -216,11 +216,11 @@ class IcommercePayuApiController extends BaseApiController
 
         } // End if Not Processed and Canceled
 
-        \Log::info('Module Icommercepayu: Response - END');
+        \Log::info('Icommercepayu: Response|END');
 
       } catch (\Exception $e) {
 
-        \Log::info('Module Icommercepayu: Exception');
+        \Log::info('Icommercepayu: Response|Exception');
 
           // Get IDS
           $referenceSale = explode('-',$request->reference_sale);
@@ -261,8 +261,8 @@ class IcommercePayuApiController extends BaseApiController
           ];
 
           //Log Error
-          \Log::error('Module Icommercepayu: Message: '.$e->getMessage());
-          \Log::error('Module Icommercepayu: Code: '.$e->getCode());
+          \Log::error('Icommercepayu: Message: '.$e->getMessage());
+          \Log::error('Icommercepayu: Code: '.$e->getCode());
 
       }
 
