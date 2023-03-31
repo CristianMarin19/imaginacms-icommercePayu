@@ -73,7 +73,7 @@ class PublicController extends BasePublicController
             // Validate get data
             $order = $this->order->find($orderID);
             $transaction = $this->transaction->find($transactionID);
-            $currency = $this->currency->find($currencyID);
+            //$currency = $this->currency->find($currencyID);
 
             $paymentName = config('asgard.icommercepayu.config.paymentName');
 
@@ -103,7 +103,8 @@ class PublicController extends BasePublicController
             $payU->setReferenceCode($orderID); // OrderID
             $payU->setDescription($restDescription); //DESCRIPCION
             $payU->setAmount($order->total);
-            $payU->setCurrency($currency->code);
+            //$payU->setCurrency($currency->code);
+            $payU->setCurrency($order->currency_code);
             $payU->setTax(0); // 0 valor del impuesto asociado a la venta
             $payU->setTaxReturnBase(0); // 0 valor de devolución del impuesto
             $payU->setTest($paymentMethod->options->test);

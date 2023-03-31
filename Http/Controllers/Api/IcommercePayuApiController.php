@@ -80,7 +80,8 @@ class IcommercePayuApiController extends BaseApiController
               throw new \Exception(trans("icommercepayu::icommercepayus.messages.minimum")." :".$paymentMethod->options->minimunAmount, 204);
 
             // get currency active
-            $currency = $this->currency->getActive();
+            //$currency = $this->currency->getActive();
+            $currency = $order->currency_code;
 
             // Create Transaction
             $transaction = $this->validateResponseApi(
@@ -93,7 +94,7 @@ class IcommercePayuApiController extends BaseApiController
             );
 
             // Encri
-            $eUrl = $this->icommercepayu->encriptUrl($order->id,$transaction->id,$currency->id);
+            $eUrl = $this->icommercepayu->encriptUrl($order->id,$transaction->id,$currency);
 
             $redirectRoute = route('icommercepayu',[$eUrl]);
 
