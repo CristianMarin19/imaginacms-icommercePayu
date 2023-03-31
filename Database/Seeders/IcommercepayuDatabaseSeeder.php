@@ -40,6 +40,7 @@ class IcommercepayuDatabaseSeeder extends Seeder
         $options['mode'] = "sandbox";
         $options['test'] = 1;
         $options['minimunAmount'] = 15000;
+        $options['showInCurrencies'] = ["COP"];
   
         $titleTrans = 'icommercepayu::icommercepayus.single';
         $descriptionTrans = 'icommercepayu::icommercepayus.description';
