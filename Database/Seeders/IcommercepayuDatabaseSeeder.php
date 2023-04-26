@@ -5,6 +5,7 @@ namespace Modules\Icommercepayu\Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Icommerce\Entities\PaymentMethod;
+use Modules\Isite\Jobs\ProcessSeeds;
 
 class IcommercepayuDatabaseSeeder extends Seeder
 {
@@ -17,8 +18,10 @@ class IcommercepayuDatabaseSeeder extends Seeder
     {
       
       Model::unguard();
-
-      $this->call(IcommercepayuModuleTableSeeder::class);
+      ProcessSeeds::dispatch([
+        "baseClass" => "\Modules\Icommercepayu\Database\Seeders",
+        "seeds" => ["IcommercepayuModuleTableSeeder"]
+      ]);
       
       if(!is_module_enabled('Icommercepayu')){
         $this->command->alert("This module: Icommercepayu is DISABLED!! , please enable the module and then run the seed");
