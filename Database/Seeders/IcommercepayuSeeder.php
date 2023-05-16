@@ -57,8 +57,8 @@ class IcommercepayuSeeder extends Seeder
             $this->addTranslation($paymentMethod,'es',$titleTrans,$descriptionTrans);
     
         }else{
-    
-            $this->command->alert("This method has already been installed !!");
+            //It doesn't work in jobs
+            //$this->command->alert("This method has already been installed !!");
     
         }
         
