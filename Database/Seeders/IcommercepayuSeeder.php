@@ -47,7 +47,7 @@ class IcommercepayuSeeder extends Seeder
     
             $params = array(
               'name' => $name,
-              'status' => 1,
+              'status' => 0,
               'options' => $options,
               'organization_id' => isset(tenant()->id) ? tenant()->id : null
             );
