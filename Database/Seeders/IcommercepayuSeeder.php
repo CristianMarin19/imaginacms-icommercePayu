@@ -21,7 +21,7 @@ class IcommercepayuSeeder extends Seeder
         Model::unguard();
 
         if(!is_module_enabled('Icommercepayu')){
-            $this->command->alert("This module: Icommercepayu is DISABLED!! , please enable the module and then run the seed");
+            //$this->command->alert("This module: Icommercepayu is DISABLED!! , please enable the module and then run the seed");
             exit();
         }
           
