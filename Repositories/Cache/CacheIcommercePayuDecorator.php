@@ -28,9 +28,9 @@ class CacheIcommercePayuDecorator extends BaseCacheDecorator implements Icommerc
      */
     public function encriptUrl($orderID, $transactionID, $currencyID)
     {
-        return $this->remember(function () use ($orderID, $transactionID, $currencyID) {
-            return $this->repository->encriptUrl($orderID, $transactionID, $currencyID);
-        });
+        
+        return $this->repository->encriptUrl($orderID, $transactionID, $currencyID);
+        
     }
 
     /**
@@ -40,8 +40,8 @@ class CacheIcommercePayuDecorator extends BaseCacheDecorator implements Icommerc
      */
     public function decriptUrl($eUrl)
     {
-        return $this->remember(function () use ($eUrl) {
-            return $this->repository->decriptUrl($eUrl);
-        });
+        
+        return $this->repository->decriptUrl($eUrl);
+        
     }
 }
